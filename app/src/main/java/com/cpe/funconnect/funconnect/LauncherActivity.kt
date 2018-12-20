@@ -14,7 +14,7 @@ class LauncherActivity : AppCompatActivity() {
     internal val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
 
-            val intent = Intent(applicationContext, DrawActivity::class.java)
+            val intent = Intent(applicationContext, Entry_Activity::class.java)
             startActivity(intent)
             finish()
         }

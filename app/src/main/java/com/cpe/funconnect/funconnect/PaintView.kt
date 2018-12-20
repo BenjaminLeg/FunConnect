@@ -2,29 +2,24 @@ package com.cpe.funconnect.funconnect
 
 import android.content.Context
 import android.graphics.*
-import android.provider.Settings.Global.getFloat
 import android.view.MotionEvent
-//import android.support.test.runner.intent.IntentStubberRegistry.reset
 import android.util.DisplayMetrics
-//import java.awt.font.ShapeGraphicAttribute.STROKE
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.max
+import android.widget.Toast
+import com.cpe.funconnect.funconnect.Tools.Coord
 
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var mX: Float = 0.toFloat()
     private var mY: Float = 0.toFloat()
+    var coords = ArrayList<Coord>()
     private var mPath: Path? = null
     private val mPaint: Paint
     private val paths = ArrayList<FingerPath>()
     private var currentColor: Int = 0
     private var backGroundColor: Int = DEFAULT_BG_COLOR
     private var strokeWidth: Float = 0.toFloat()
-    private var emboss: Boolean = false
-    private var blur: Boolean = false
-    private val mEmboss: MaskFilter
-    private val mBlur: MaskFilter
     private var mBitmap: Bitmap? = null
     private var mCanvas: Canvas? = null
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
@@ -40,8 +35,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPaint.setXfermode(null)
         mPaint.setAlpha(0xff)
 
-        mEmboss = EmbossMaskFilter(floatArrayOf(1f, 1f, 1f), 0.4f, 6f, 3.5f)
-        mBlur = BlurMaskFilter(5f, BlurMaskFilter.Blur.NORMAL)
     }
 
     fun init(metrics: DisplayMetrics) {
@@ -55,25 +48,10 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         strokeWidth = BRUSH_SIZE
     }
 
-    fun normal() {
-        emboss = false
-        blur = false
-    }
-
-    fun emboss() {
-        emboss = true
-        blur = false
-    }
-
-    fun blur() {
-        emboss = false
-        blur = true
-    }
 
     fun clear() {
         backGroundColor = DEFAULT_BG_COLOR
         paths.clear()
-        normal()
         invalidate()
     }
 
@@ -86,10 +64,6 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPaint.setStrokeWidth(fp.strokeWidth)
             mPaint.setMaskFilter(null)
 
-            if (fp.emboss)
-                mPaint.setMaskFilter(mEmboss)
-            else if (fp.blur)
-                mPaint.setMaskFilter(mBlur)
 
             mCanvas!!.drawPath(fp.path, mPaint)
 
@@ -103,7 +77,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath = Path()
         val tmp = mPath
         if(tmp is Path){
-            val fp = FingerPath(currentColor, emboss, blur, strokeWidth, tmp)
+            val fp = FingerPath(currentColor, strokeWidth, tmp)
             paths.add(fp)
         }
 
@@ -113,6 +87,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath!!.moveTo(x, y)
         mX = x
         mY = y
+        coords.add(Coord(x , y))
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -123,6 +98,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPath!!.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
             mX = x
             mY = y
+            coords.add(Coord(x , y))
         }
     }
 
@@ -154,8 +130,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     companion object {
 
-        var BRUSH_SIZE = 20.toFloat()
-        val DEFAULT_COLOR = Color.RED
+        var BRUSH_SIZE = 10.toFloat()
+        val DEFAULT_COLOR = Color.BLACK
         val DEFAULT_BG_COLOR = Color.WHITE
         private val TOUCH_TOLERANCE = 4f
     }

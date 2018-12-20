@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_draw.*
 
 
 class DrawActivity : AppCompatActivity() {
@@ -20,6 +22,11 @@ class DrawActivity : AppCompatActivity() {
         var paint = paintView
         if(paint is PaintView) {
             paint.init(metrics)
+        }
+
+        sendSig.setOnClickListener {
+            Toast.makeText(this, paint?.coords?.size, Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 

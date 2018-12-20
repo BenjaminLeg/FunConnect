@@ -10,6 +10,16 @@
     <com.cpe.funconnect.funconnect.PaintView
             android:id="@+id/paintView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+    />
+
+    <Button android:id="@+id/sendSig"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignBottom="@+id/paintView"
+            android:text="Send"
+
+    />
+
 
 </RelativeLayout>
