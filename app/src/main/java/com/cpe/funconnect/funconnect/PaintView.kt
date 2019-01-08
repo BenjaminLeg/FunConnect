@@ -2,18 +2,18 @@ package com.cpe.funconnect.funconnect
 
 import android.content.Context
 import android.graphics.*
+import android.os.SystemClock
 import android.view.MotionEvent
 import android.util.DisplayMetrics
 import android.util.AttributeSet
 import android.view.View
-import android.widget.Toast
 import com.cpe.funconnect.funconnect.Tools.Coord
 
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var mX: Float = 0.toFloat()
     private var mY: Float = 0.toFloat()
-    var coords = ArrayList<Coord>()
+    val coords = ArrayList<Coord>()
     private var mPath: Path? = null
     private val mPaint: Paint
     private val paths = ArrayList<FingerPath>()
@@ -22,6 +22,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var strokeWidth: Float = 0.toFloat()
     private var mBitmap: Bitmap? = null
     private var mCanvas: Canvas? = null
+    private var time : Long = 0
+    private var firstTouch : Boolean = true
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
     init {
@@ -87,7 +89,12 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath!!.moveTo(x, y)
         mX = x
         mY = y
-        coords.add(Coord(x , y))
+        
+        if(firstTouch){
+            time = SystemClock.uptimeMillis()
+            firstTouch = false
+        }
+        coords.add(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() ))
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -98,7 +105,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPath!!.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
             mX = x
             mY = y
-            coords.add(Coord(x , y))
+            coords.add(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt()))
         }
     }
 

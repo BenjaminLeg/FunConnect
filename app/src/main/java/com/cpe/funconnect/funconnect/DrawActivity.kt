@@ -25,7 +25,8 @@ class DrawActivity : AppCompatActivity() {
         }
 
         sendSig.setOnClickListener {
-            Toast.makeText(this, paint?.coords?.size, Toast.LENGTH_SHORT).show()
+            var jsonMaker = JSONmaker()
+            jsonMaker.createJSON(paintView?.coords)
             finish()
         }
     }
