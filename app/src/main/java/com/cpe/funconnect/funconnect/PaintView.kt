@@ -89,7 +89,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPath!!.moveTo(x, y)
         mX = x
         mY = y
-        
+
         if(firstTouch){
             time = SystemClock.uptimeMillis()
             firstTouch = false

@@ -5,13 +5,18 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_draw.*
 
 
-class DrawActivity : AppCompatActivity() {
+class DrawActivity : AppCompatActivity(), ConnectionInterface {
+
 
     private var paintView: PaintView? = null
+    private var communicationTask: CommunicationTask? = null
+    private lateinit var progress: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,8 @@ class DrawActivity : AppCompatActivity() {
         sendSig.setOnClickListener {
             var jsonMaker = JSONmaker()
             jsonMaker.createJSON(paintView?.coords)
+            communicationTask = CommunicationTask(jsonMaker.jsonObject, this)
+            communicationTask?.execute()
             finish()
         }
     }
@@ -46,5 +53,9 @@ class DrawActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onLastReply(text : String?) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 }

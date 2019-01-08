@@ -7,7 +7,7 @@ import java.util.*
 
 class JSONmaker {
 
-    private var jsonObject = JSONObject()
+    var jsonObject = JSONObject()
 
 
     fun createJSON(listeCoord : kotlin.collections.ArrayList<Coord>?){
