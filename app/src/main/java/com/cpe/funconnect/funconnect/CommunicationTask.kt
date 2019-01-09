@@ -7,7 +7,6 @@ import com.github.kittinunf.fuel.httpPost
 import org.json.JSONObject
 
 
-
 class CommunicationTask() : AsyncTask<Void,Void,String>() {
 
     private lateinit var jsonObject : JSONObject
@@ -25,9 +24,14 @@ class CommunicationTask() : AsyncTask<Void,Void,String>() {
 
     override fun doInBackground(vararg params: Void?): String {
         var reply = ""
-        "http://httpbin.org/post".httpPost().response{
+        "http://httpbin.org/post"
+            .httpPost()
+            .header("Content-Type" to "application/json")
+            .body(this.jsonObject.toString())
+            .response{
                 request, response, result ->
-            reply = response.responseMessage
+                 reply = response.responseMessage
+
         }
 
         while(reply == ""){

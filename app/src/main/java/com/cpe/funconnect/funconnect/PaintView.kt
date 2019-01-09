@@ -54,6 +54,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     fun clear() {
         backGroundColor = DEFAULT_BG_COLOR
         paths.clear()
+        coords.clear()
+        firstTouch = true
         invalidate()
     }
 
@@ -134,6 +136,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         return true
     }
+
 
     companion object {
 
