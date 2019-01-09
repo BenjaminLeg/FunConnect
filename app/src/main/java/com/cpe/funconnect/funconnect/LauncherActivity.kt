@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class LauncherActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class LauncherActivity : AppCompatActivity() {
 
     internal val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
-
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
             val intent = Intent(applicationContext, Entry_Activity::class.java)
             startActivity(intent)
             finish()

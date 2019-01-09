@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "931618567748",
+    "firebase_url": "https://funconnect.firebaseio.com",
+    "project_id": "funconnect",
+    "storage_bucket": "funconnect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931618567748:android:882306ed54458d40",
+        "android_client_info": {
+          "package_name": "com.cpe.funconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931618567748-cdt1v8crf4sbd5eutf9hman1st76f7a7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDwWOoh5obFJC2EWid-gFnDvxRzSdHZFs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931618567748:android:cfbe8f5f27b7cb0f",
+        "android_client_info": {
+          "package_name": "com.cpe.funconnect.funconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931618567748-cdt1v8crf4sbd5eutf9hman1st76f7a7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDwWOoh5obFJC2EWid-gFnDvxRzSdHZFs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

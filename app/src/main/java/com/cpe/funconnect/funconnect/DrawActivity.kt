@@ -33,13 +33,7 @@ class DrawActivity : AppCompatActivity(), ConnectionInterface {
         }
 
         sendSig.setOnClickListener {
-            paintView?.visibility = View.INVISIBLE
-            progress?.visibility = View.VISIBLE
-            var jsonMaker = JSONmaker()
-            jsonMaker.createJSON(paintView?.coords)
-            communicationTask = CommunicationTask(jsonMaker.jsonObject, this)
-            communicationTask?.execute()
-            //finish()
+            sendTasks()
         }
     }
 
@@ -65,5 +59,15 @@ class DrawActivity : AppCompatActivity(), ConnectionInterface {
         paintView?.clear()
         paintView?.visibility = View.VISIBLE
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
+    fun sendTasks(){
+        paintView?.visibility = View.INVISIBLE
+        progress?.visibility = View.VISIBLE
+        var jsonMaker = JSONmaker()
+        jsonMaker.createJSON(paintView?.coords)
+        communicationTask = CommunicationTask(jsonMaker.jsonObject, this)
+        communicationTask?.execute()
+        //finish()
     }
 }
