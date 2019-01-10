@@ -65,7 +65,7 @@ class DrawActivity : AppCompatActivity(), ConnectionInterface {
         paintView?.visibility = View.INVISIBLE
         progress?.visibility = View.VISIBLE
         var jsonMaker = JSONmaker()
-        jsonMaker.createJSON(paintView?.coords)
+        jsonMaker.createJSON(paintView?.getCoord())
         communicationTask = CommunicationTask(jsonMaker.jsonObject, this)
         communicationTask?.execute()
         //finish()

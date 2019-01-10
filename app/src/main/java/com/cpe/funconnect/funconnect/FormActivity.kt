@@ -3,25 +3,15 @@ package com.cpe.funconnect.funconnect
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.app.LoaderManager.LoaderCallbacks
-import android.content.CursorLoader
-import android.content.Loader
-import android.database.Cursor
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.View
-import android.widget.ArrayAdapter
-
-import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -33,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_form.*
 /**
  * A login screen that offers login via email/password.
  */
-class FormActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class FormActivity : AppCompatActivity(){
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -48,52 +38,9 @@ class FormActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
         // Set up the login form.
-        populateAutoComplete()
         email_sign_in_button.setOnClickListener { attemptLogin() }
     }
 
-    private fun populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return
-        }
-
-        loaderManager.initLoader(0, null, this)
-    }
-
-    private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok,
-                    { requestPermissions(arrayOf(READ_CONTACTS),
-                        REQUEST_READ_CONTACTS
-                    ) })
-        } else {
-            requestPermissions(arrayOf(READ_CONTACTS),
-                REQUEST_READ_CONTACTS
-            )
-        }
-        return false
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete()
-            }
-        }
-    }
 
 
     /**
@@ -144,10 +91,6 @@ class FormActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         return email.contains("@")
     }
 
-    private fun isPasswordValid(password: String): Boolean {
-        //TODO: Replace this with your own logic
-        return password.length > 4
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -187,51 +130,6 @@ class FormActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
-    override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
-        return CursorLoader(
-            this,
-            // Retrieve data rows for the device user's 'profile' contact.
-            Uri.withAppendedPath(
-                ContactsContract.Profile.CONTENT_URI,
-                ContactsContract.Contacts.Data.CONTENT_DIRECTORY
-            ), ProfileQuery.PROJECTION,
-
-            // Select only email addresses.
-            ContactsContract.Contacts.Data.MIMETYPE + " = ?", arrayOf(
-                ContactsContract.CommonDataKinds.Email
-                    .CONTENT_ITEM_TYPE
-            ),
-
-            // Show primary email addresses first. Note that there won't be
-            // a primary email address if the user hasn't specified one.
-            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
-        )
-    }
-
-    override fun onLoadFinished(cursorLoader: Loader<Cursor>, cursor: Cursor) {
-        val emails = ArrayList<String>()
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS))
-            cursor.moveToNext()
-        }
-
-        addEmailsToAutoComplete(emails)
-    }
-
-    override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
-
-    }
-
-    private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        val adapter = ArrayAdapter(
-            this@FormActivity,
-            android.R.layout.simple_dropdown_item_1line, emailAddressCollection
-        )
-
-     //   email.setAdapter(adapter)
-    }
 
     object ProfileQuery {
         val PROJECTION = arrayOf(
@@ -276,30 +174,13 @@ class FormActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-                finish()
+                val intent = Intent(getContext(), DrawActivity::class.java)
+                startActivity(intent)
             } else {
-                email.error = getString(R.string.error_incorrect_password)
+                email.error = getString(R.string.error_invalid_email)
                 email.requestFocus()
             }
         }
 
-        override fun onCancelled() {
-            mAuthTask = null
-            showProgress(false)
-        }
-    }
-
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }

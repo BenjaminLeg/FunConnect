@@ -50,6 +50,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         strokeWidth = BRUSH_SIZE
     }
 
+    public fun getCoord(): ArrayList<Coord>{
+        return this.coords
+    }
 
     fun clear() {
         backGroundColor = DEFAULT_BG_COLOR
