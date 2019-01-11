@@ -174,7 +174,7 @@ class FormActivity : AppCompatActivity(){
             showProgress(false)
 
             if (success!!) {
-                val intent = Intent(getContext(), DrawActivity::class.java)
+                val intent = Intent(getContext(), DrawRegister::class.java)
                 startActivity(intent)
             } else {
                 email.error = getString(R.string.error_invalid_email)

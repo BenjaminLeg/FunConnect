@@ -3,7 +3,6 @@ package com.cpe.funconnect.funconnect
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import kotlinx.android.synthetic.main.activity_entry.*
 
 class Entry_Activity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class Entry_Activity : AppCompatActivity() {
         }
 
         buttonConnect.setOnClickListener {
-            val intent = Intent(this, DrawActivity::class.java)
+            val intent = Intent(this, DrawConnect::class.java)
             startActivity(intent)
         }
     }

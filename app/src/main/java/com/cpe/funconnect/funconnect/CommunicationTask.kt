@@ -40,14 +40,15 @@ class CommunicationTask() : AsyncTask<Void,Void,String>() {
                     }
                 }
 
-                return@response
-
         }
+
+        while(reply.isEmpty()){ }
 
         return reply
     }
 
     override fun onPostExecute(result: String?) {
-            connection.onLastReply(result)
+        super.onPostExecute(result)
+        connection.onLastReply(result)
     }
 }

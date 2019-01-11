@@ -48,7 +48,9 @@
                 android:name=".FormActivity"
                 android:label="@string/title_activity_form">
         </activity>
-        <activity android:name=".DrawActivity">
+        <activity android:name=".DrawRegister">
+        </activity>
+        <activity android:name=".DrawConnect">
         </activity>
         <activity android:name=".Entry_Activity">
         </activity>
