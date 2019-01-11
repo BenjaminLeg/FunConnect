@@ -9,8 +9,11 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.io.File
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -32,21 +35,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage?.from}")
 
         // Check if message contains a data payload.
         remoteMessage?.data?.isNotEmpty()?.let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                handleNow()
-            }
+            val body : String = "body"
+            sendNotification(remoteMessage.data.get(body)!!)
         }
 
         // Check if message contains a notification payload.
@@ -55,6 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message Notification Body: ${it.body}")
             sendNotification(message)
         }
+
 
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -71,33 +68,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String?) {
         Log.d(TAG, "Refreshed token: $token")
 
+        val filename: String = "token.txt"
+        val directory = File(this.filesDir, filename)
+
+
+        val files : Array<File> = directory.listFiles()
+
+        this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+            it.write(token?.toByteArray())
+        }
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         sendRegistrationToServer(token)
     }
     // [END on_new_token]
-
-    /**
-     * Schedule a job using FirebaseJobDispatcher.
-     */
-    private fun scheduleJob() {
-        // [START dispatch_job]
-       /* val dispatcher = FirebaseJobDispatcher(GooglePlayDriver(this))
-        val myJob = dispatcher.newJobBuilder()
-            .setService(MyJobService::class.java)
-            .setTag("my-job-tag")
-            .build()
-        dispatcher.schedule(myJob)*/
-        // [END dispatch_job]
-    }
-
-    /**
-     * Handle time allotted to BroadcastReceivers.
-     */
-    private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
-    }
 
     /**
      * Persist token to third-party servers.
@@ -108,7 +93,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
+        "http://httpbin.org/post"
+            .httpPost()
+            .header("Content-Type" to "application/json")
+            .body("token: \"$token\"")
+            .response{
+                    request, response, result ->
+                when (result){
+                   is  Result.Failure ->{
+
+                   }
+                   is Result.Success ->{
+
+                   }
+                }
+
+            }
     }
 
     /**

@@ -30,11 +30,17 @@ class CommunicationTask() : AsyncTask<Void,Void,String>() {
             .body(this.jsonObject.toString())
             .response{
                 request, response, result ->
-                 reply = response.responseMessage
 
-        }
+                when(result){
+                    is com.github.kittinunf.result.Result.Failure ->{
+                        reply = "Failure"
+                    }
+                    is com.github.kittinunf.result.Result.Success ->{
+                        reply = "Success"
+                    }
+                }
 
-        while(reply == ""){
+                return@response
 
         }
 

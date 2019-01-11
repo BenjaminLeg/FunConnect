@@ -19,12 +19,17 @@ class DrawActivity : AppCompatActivity(), ConnectionInterface {
     private var paintView: PaintView? = null
     private var communicationTask: CommunicationTask? = null
     private var progress: ProgressBar? = null
+    private var attempt: Int = 0
+    private val MAX_ATTEMPT: Int = 3
+    private val FIRST_CONNECT_ATTEMPT: Int = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_draw)
         paintView = findViewById(R.id.paintView) as PaintView
         progress = findViewById(R.id.progressBar) as ProgressBar
+        attempt = 1;
+        attemptText.setText("Attempt : $attempt")
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
         var paint = paintView
@@ -55,6 +60,8 @@ class DrawActivity : AppCompatActivity(), ConnectionInterface {
     }
 
     override fun onLastReply(text : String?) {
+        attempt++
+        attemptText.setText("Attempt : $attempt")
         progress?.visibility = View.GONE
         paintView?.clear()
         paintView?.visibility = View.VISIBLE
