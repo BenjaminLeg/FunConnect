@@ -8,12 +8,13 @@ import android.util.DisplayMetrics
 import android.util.AttributeSet
 import android.view.View
 import com.cpe.funconnect.funconnect.Tools.Coord
+import com.cpe.funconnect.funconnect.Tools.Signature
 
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var mX: Float = 0.toFloat()
     private var mY: Float = 0.toFloat()
-    val coords = ArrayList<Coord>()
+    lateinit var signature : Signature
     private var mPath: Path? = null
     private val mPaint: Paint
     private val paths = ArrayList<FingerPath>()
@@ -43,6 +44,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         val height = metrics.heightPixels
         val width = metrics.widthPixels
 
+        signature = Signature()
+
         mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         mCanvas = Canvas(mBitmap)
 
@@ -50,14 +53,14 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         strokeWidth = BRUSH_SIZE
     }
 
-    public fun getCoord(): ArrayList<Coord>{
-        return this.coords
+    public fun getCoord(): Signature {
+        return this.signature
     }
 
     fun clear() {
         backGroundColor = DEFAULT_BG_COLOR
         paths.clear()
-        coords.clear()
+        signature = Signature();
         firstTouch = true
         invalidate()
     }
@@ -99,7 +102,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             time = SystemClock.uptimeMillis()
             firstTouch = false
         }
-        coords.add(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() ))
+        signature.addCoord(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() ))
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -110,7 +113,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPath!!.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
             mX = x
             mY = y
-            coords.add(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt()))
+            signature.addCoord(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt()))
         }
     }
 

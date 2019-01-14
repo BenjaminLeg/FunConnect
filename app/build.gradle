@@ -36,5 +36,6 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:1.15.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.code.gson:gson:2.4'
 }
 apply plugin: 'com.google.gms.google-services'

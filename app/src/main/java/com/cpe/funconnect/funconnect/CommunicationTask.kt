@@ -3,11 +3,12 @@ package com.cpe.funconnect.funconnect
 
 
 import android.os.AsyncTask
+import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import org.json.JSONObject
 
 
-class CommunicationTask() : AsyncTask<Void,Void,String>() {
+class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
 
     private lateinit var jsonObject : JSONObject
     private lateinit var connection : ConnectionInterface
@@ -22,7 +23,7 @@ class CommunicationTask() : AsyncTask<Void,Void,String>() {
         super.onPreExecute()
     }
 
-    override fun doInBackground(vararg params: Void?): String {
+    override fun doInBackground(vararg params: Void?): Boolean {
         var reply = ""
         "http://httpbin.org/post"
             .httpPost()
@@ -44,10 +45,10 @@ class CommunicationTask() : AsyncTask<Void,Void,String>() {
 
         while(reply.isEmpty()){ }
 
-        return reply
+        return true
     }
 
-    override fun onPostExecute(result: String?) {
+    override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
         connection.onLastReply(result)
     }

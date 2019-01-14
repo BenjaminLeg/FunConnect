@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat
 import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.io.File
@@ -66,23 +67,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String?) {
+
+        super.onNewToken(token)
         Log.d(TAG, "Refreshed token: $token")
 
-        val filename: String = "token.txt"
-        val directory = File(this.filesDir, filename)
-
-
-        val files : Array<File> = directory.listFiles()
-
-        this.openFileOutput(filename, Context.MODE_PRIVATE).use {
-            it.write(token?.toByteArray())
-        }
+        getSharedPreferences("_", MODE_PRIVATE).edit().putString("fb", token).apply();
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         sendRegistrationToServer(token)
     }
     // [END on_new_token]
+
 
     /**
      * Persist token to third-party servers.
@@ -148,5 +144,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
 
         private const val TAG = "MyFirebaseMsgService"
+        fun getToken(context: Context): String {
+            return context.getSharedPreferences("_", Context.MODE_PRIVATE).getString("fb", "empty")
+        }
     }
 }

@@ -13,10 +13,10 @@ import android.view.View
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
+import com.google.firebase.messaging.FirebaseMessagingService
 
 import kotlinx.android.synthetic.main.activity_form.*
 
@@ -87,7 +87,6 @@ class FormActivity : AppCompatActivity(){
     }
 
     private fun isEmailValid(email: String): Boolean {
-        //TODO: Replace this with your own logic
         return email.contains("@")
     }
 
@@ -152,21 +151,26 @@ class FormActivity : AppCompatActivity(){
         val queue = Volley.newRequestQueue(applicationContext)
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            // Request a string response from the provided URL.
-            val stringRequest = StringRequest(
-                Request.Method.GET, url,
-                Response.Listener<String> { response ->
-                    // Display the first 500 characters of the response string.
-                    Toast.makeText(applicationContext, response.substring(0, 500),Toast.LENGTH_LONG).show()
-                },
-                Response.ErrorListener {response ->
-                    Toast.makeText(applicationContext, response.networkResponse.statusCode,Toast.LENGTH_LONG).show()})
+            var reply = false
+            "http://httpbin.org/post"
+                .httpGet()
+                .header("Content-Type" to "application/json")
+                .body(this.mEmail)
+                .response{
+                        request, response, result ->
 
-            // Add the request to the RequestQueue.
-            queue.add(stringRequest)
-            queue.start()
+                    when(result){
+                        is com.github.kittinunf.result.Result.Failure ->{
+                            Toast.makeText(applicationContext, response.responseMessage,Toast.LENGTH_LONG).show()
+                        }
+                        is com.github.kittinunf.result.Result.Success ->{
+                            Toast.makeText(applicationContext, response.responseMessage,Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                }
+
             return true
-
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -175,6 +179,8 @@ class FormActivity : AppCompatActivity(){
 
             if (success!!) {
                 val intent = Intent(getContext(), DrawRegister::class.java)
+                getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", mEmail).apply();
+                intent.putExtra("email", mEmail)
                 startActivity(intent)
             } else {
                 email.error = getString(R.string.error_invalid_email)

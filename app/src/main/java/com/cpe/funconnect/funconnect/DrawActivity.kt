@@ -6,22 +6,24 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.cpe.funconnect.funconnect.Tools.Signature
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*
 
 
 abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
 
 
-    private var paintView: PaintView? = null
-    private var communicationTask: CommunicationTask? = null
-    private var progress: ProgressBar? = null
+    protected var paintView: PaintView? = null
+    protected var communicationTask: CommunicationTask? = null
+    protected var progress: ProgressBar? = null
     protected var attempt: Int = 0
-    private val MAX_ATTEMPT: Int = 3
-    private val FIRST_CONNECT_ATTEMPT: Int = 5
+    protected var user : User? = null
+    protected lateinit var gson : Gson
+    protected lateinit var signatures : ArrayList<Signature>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,11 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
         windowManager.defaultDisplay.getMetrics(metrics)
         var paint = paintView
         paint?.init(metrics)
+        signatures = ArrayList<Signature>()
+
+        gson = Gson()
+        var gsonBuilder = GsonBuilder()
+        gson = gsonBuilder.create()
 
 
         sendSig.setOnClickListener {
@@ -56,20 +63,14 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onLastReply(text : String?) {
-        attempt++
+    override fun onLastReply(text : Boolean) {
         progress?.visibility = View.GONE
         paintView?.clear()
         paintView?.visibility = View.VISIBLE
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
     }
 
-    fun sendTasks(){
-        paintView?.visibility = View.INVISIBLE
-        progress?.visibility = View.VISIBLE
-        var jsonMaker = JSONmaker()
-        jsonMaker.createJSON(paintView?.getCoord())
-        communicationTask = CommunicationTask(jsonMaker.jsonObject, this)
-        communicationTask?.execute()
+    open fun sendTasks(){
+       // jsonMaker.addCoord(paintView?.getCoord(), attempt)
     }
 }
