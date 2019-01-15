@@ -4,25 +4,25 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="#ffffff"
-             tools:context=".LauncherActivity"
+             tools:context=".Activities.LauncherActivity"
             android:orientation="vertical"
 >
 
     <ImageView android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:src="@drawable/ic_validation"
-               android:gravity="center"
+               android:gravity="center|bottom"
                android:layout_weight="1"/>
 
     <TextView
             android:id="@+id/fullscreen_text_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center|top"
             android:keepScreenOn="true"
             android:text="Connected"
             android:textColor="#000"
             android:textSize="25sp"
-            android:layout_weight="1"/>
+            android:layout_weight="3"/>
 
 </LinearLayout>

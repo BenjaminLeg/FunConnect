@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Model
 
 import android.content.Context
 import android.graphics.*
@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.util.DisplayMetrics
 import android.util.AttributeSet
 import android.view.View
-import com.cpe.funconnect.funconnect.Tools.Signature
 
 
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {

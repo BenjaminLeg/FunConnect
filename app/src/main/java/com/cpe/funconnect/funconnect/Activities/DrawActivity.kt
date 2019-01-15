@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,8 +7,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
-import com.cpe.funconnect.funconnect.Tools.Signature
+import com.cpe.funconnect.funconnect.*
+import com.cpe.funconnect.funconnect.Model.PaintView
+import com.cpe.funconnect.funconnect.Model.Signature
+import com.cpe.funconnect.funconnect.Model.User
+import com.cpe.funconnect.funconnect.Task.CommunicationTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*

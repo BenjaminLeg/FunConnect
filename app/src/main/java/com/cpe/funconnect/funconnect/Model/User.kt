@@ -1,6 +1,6 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Model
 
-import com.cpe.funconnect.funconnect.Tools.Signature
+import com.cpe.funconnect.funconnect.Model.Signature
 
 
 class User(protected var signatures: ArrayList<Signature>, protected var email: String, private var token: String) {

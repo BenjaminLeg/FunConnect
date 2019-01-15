@@ -1,8 +1,9 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import com.cpe.funconnect.funconnect.R
 
 class ValidationScreenActivity: AppCompatActivity()  {
 

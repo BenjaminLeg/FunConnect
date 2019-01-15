@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -9,13 +9,15 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.content.Intent
+import com.cpe.funconnect.funconnect.R
+import com.cpe.funconnect.funconnect.Task.UserLoginTask
 import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_form.*
 
 /**
  * A login screen that offers login via email/password.
  */
-class FormActivity : AppCompatActivity(), ConnectionInterface{
+class FormActivity : AppCompatActivity(), ConnectionInterface {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.

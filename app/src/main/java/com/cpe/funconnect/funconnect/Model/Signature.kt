@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Tools
+package com.cpe.funconnect.funconnect.Model
 
 class Signature {
 

@@ -1,11 +1,10 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.widget.Toast
+import com.cpe.funconnect.funconnect.R
 import com.google.firebase.messaging.FirebaseMessaging
 
 

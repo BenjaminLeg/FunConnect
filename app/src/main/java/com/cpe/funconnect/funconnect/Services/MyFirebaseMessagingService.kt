@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,12 +9,12 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.cpe.funconnect.funconnect.Activities.DrawConnect
+import com.cpe.funconnect.funconnect.R
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import java.io.File
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {

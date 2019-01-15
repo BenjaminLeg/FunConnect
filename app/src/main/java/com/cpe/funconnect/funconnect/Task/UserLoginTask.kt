@@ -1,6 +1,7 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Task
 
 import android.os.AsyncTask
+import com.cpe.funconnect.funconnect.Activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 

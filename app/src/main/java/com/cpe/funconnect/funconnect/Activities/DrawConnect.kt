@@ -1,9 +1,13 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.cpe.funconnect.funconnect.*
+import com.cpe.funconnect.funconnect.Model.User
+import com.cpe.funconnect.funconnect.Services.MyFirebaseMessagingService
+import com.cpe.funconnect.funconnect.Task.CommunicationTask
 import kotlinx.android.synthetic.main.activity_draw.*
 import org.json.JSONObject
 
@@ -31,7 +35,11 @@ class DrawConnect: DrawActivity() {
         paintView?.visibility = View.INVISIBLE
         progress?.visibility = View.VISIBLE
         signatures.add(paintView!!.getCoord())
-        user =User(signatures, this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"), MyFirebaseMessagingService.getToken(this))
+        user = User(
+            signatures,
+            this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"),
+            MyFirebaseMessagingService.getToken(this)
+        )
         var newUser = gson.toJson(user)
         var jsonSend = JSONObject()
         jsonSend.put("User", JSONObject(newUser))

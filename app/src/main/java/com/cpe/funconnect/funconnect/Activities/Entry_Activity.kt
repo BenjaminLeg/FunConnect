@@ -1,8 +1,9 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.cpe.funconnect.funconnect.R
 import kotlinx.android.synthetic.main.activity_entry.*
 
 class Entry_Activity : AppCompatActivity() {
