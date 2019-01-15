@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity
 class ValidationScreenActivity: AppCompatActivity()  {
 
     private var mDelayHandler: Handler? = null
-    private val SPLASH_DELAY: Long = 6000 //6 seconds
+    private val SPLASH_DELAY: Long = 4000 //4 seconds
 
     internal val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
-            System.exit(0)
+            finish()
         }
     }
 
