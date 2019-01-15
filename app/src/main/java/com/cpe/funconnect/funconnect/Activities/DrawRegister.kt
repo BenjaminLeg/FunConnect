@@ -23,10 +23,10 @@ class DrawRegister : DrawActivity() {
     override fun onLastReply(success : Boolean) {
         super.onLastReply(success)
         if(success){
-            Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Correctly logged", Toast.LENGTH_LONG).show()
         }
         else{
-            Toast.makeText(this, "KO", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Network issue", Toast.LENGTH_LONG).show()
         }
     }
 

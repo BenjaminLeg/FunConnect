@@ -87,7 +87,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
         mAuthTask = null
         showProgress(false)
 
-        if (success!!) {
+        if (success) {
             val intent = Intent(this, DrawRegister::class.java)
             getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", email.text.toString()).apply();
             intent.putExtra("email", email.text.toString())

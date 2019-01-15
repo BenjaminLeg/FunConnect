@@ -66,7 +66,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onLastReply(text : Boolean) {
+    override fun onLastReply(success : Boolean) {
         paintView?.clear()
         progress?.visibility = View.GONE
         paintView?.visibility = View.VISIBLE

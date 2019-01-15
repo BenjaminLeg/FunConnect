@@ -4,6 +4,7 @@ package com.cpe.funconnect.funconnect.Task
 
 import android.os.AsyncTask
 import com.cpe.funconnect.funconnect.Activities.ConnectionInterface
+import com.cpe.funconnect.funconnect.R
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
@@ -26,7 +27,7 @@ class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
 
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
-        val (request, response, result) = "http://httpbin.org/post"
+        val (request, response, result) = URL_PYTHON
             .httpPost()
             .header("Content-Type" to "application/json")
             .body(this.jsonObject.toString())
@@ -47,5 +48,10 @@ class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
     override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
         connection.onLastReply(result)
+    }
+
+    companion object {
+        val URL_PYTHON = "http://httpbin.org/post"
+        val URL_SERVER = "http://httpbin.org/post"
     }
 }
