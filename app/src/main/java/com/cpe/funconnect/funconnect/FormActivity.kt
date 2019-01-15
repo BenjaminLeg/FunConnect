@@ -4,35 +4,24 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
 import android.support.v7.app.AppCompatActivity
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.View
-import android.content.Context
 import android.content.Intent
-import android.widget.Toast
-import com.android.volley.toolbox.Volley
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
 import com.google.firebase.messaging.FirebaseMessagingService
-
 import kotlinx.android.synthetic.main.activity_form.*
 
 /**
  * A login screen that offers login via email/password.
  */
-class FormActivity : AppCompatActivity(){
+class FormActivity : AppCompatActivity(), ConnectionInterface{
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
-    private var context: Context = this
 
-    protected fun getContext(): Context{
-        return this.context
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,13 +70,32 @@ class FormActivity : AppCompatActivity(){
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr)
+
+
+            mAuthTask = UserLoginTask(emailStr, this)
             mAuthTask!!.execute(null as Void?)
         }
     }
 
     private fun isEmailValid(email: String): Boolean {
-        return email.contains("@")
+        return EMAIL_REGEX.toRegex().matches(email);
+    }
+
+    override fun onLastReply(success: Boolean) {
+        mAuthTask = null
+        showProgress(false)
+
+        if (success!!) {
+            val intent = Intent(this, DrawRegister::class.java)
+            getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", email.text.toString()).apply();
+            intent.putExtra("email", email.text.toString())
+            startActivity(intent)
+            finish()
+
+        } else {
+            email.error = getString(R.string.error_email_exists)
+            email.requestFocus()
+        }
     }
 
 
@@ -129,64 +137,8 @@ class FormActivity : AppCompatActivity(){
         }
     }
 
-
-    object ProfileQuery {
-        val PROJECTION = arrayOf(
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY
-        )
-        val ADDRESS = 0
-        val IS_PRIMARY = 1
+    companion object {
+        @JvmStatic val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})";
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    inner class UserLoginTask internal constructor(private val mEmail: String) :
-        AsyncTask<Void, Void, Boolean>() {
-
-        // creates a unique boundary based on time stamp
-        private val url = "https://www.google.com"
-        val queue = Volley.newRequestQueue(applicationContext)
-
-        override fun doInBackground(vararg params: Void): Boolean? {
-            var reply = false
-            "http://httpbin.org/post"
-                .httpGet()
-                .header("Content-Type" to "application/json")
-                .body(this.mEmail)
-                .response{
-                        request, response, result ->
-
-                    when(result){
-                        is com.github.kittinunf.result.Result.Failure ->{
-                            Toast.makeText(applicationContext, response.responseMessage,Toast.LENGTH_LONG).show()
-                        }
-                        is com.github.kittinunf.result.Result.Success ->{
-                            Toast.makeText(applicationContext, response.responseMessage,Toast.LENGTH_LONG).show()
-                        }
-                    }
-
-                }
-
-            return true
-        }
-
-        override fun onPostExecute(success: Boolean?) {
-            mAuthTask = null
-            showProgress(false)
-
-            if (success!!) {
-                val intent = Intent(getContext(), DrawRegister::class.java)
-                getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", mEmail).apply();
-                intent.putExtra("email", mEmail)
-                startActivity(intent)
-            } else {
-                email.error = getString(R.string.error_invalid_email)
-                email.requestFocus()
-            }
-        }
-
-    }
 }

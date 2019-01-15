@@ -5,6 +5,7 @@ package com.cpe.funconnect.funconnect
 import android.os.AsyncTask
 import android.util.Log
 import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 import org.json.JSONObject
 
 
@@ -24,28 +25,23 @@ class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
     }
 
     override fun doInBackground(vararg params: Void?): Boolean {
-        var reply = ""
-        "http://httpbin.org/post"
+        var reply = false
+        val (request, response, result) = "http://httpbin.org/post"
             .httpPost()
             .header("Content-Type" to "application/json")
             .body(this.jsonObject.toString())
-            .response{
-                request, response, result ->
+            .response()
 
-                when(result){
-                    is com.github.kittinunf.result.Result.Failure ->{
-                        reply = "Failure"
-                    }
-                    is com.github.kittinunf.result.Result.Success ->{
-                        reply = "Success"
-                    }
-                }
-
+        when(result){
+            is Result.Failure ->{
+                reply = false
+            }
+            is Result.Success ->{
+                reply = true
+            }
         }
 
-        while(reply.isEmpty()){ }
-
-        return true
+        return reply
     }
 
     override fun onPostExecute(result: Boolean) {

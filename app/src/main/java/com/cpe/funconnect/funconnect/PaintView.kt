@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.util.DisplayMetrics
 import android.util.AttributeSet
 import android.view.View
-import com.cpe.funconnect.funconnect.Tools.Coord
 import com.cpe.funconnect.funconnect.Tools.Signature
 
 
@@ -102,7 +101,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             time = SystemClock.uptimeMillis()
             firstTouch = false
         }
-        signature.addCoord(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() ))
+        signature.addCoord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() )
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -113,7 +112,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPath!!.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
             mX = x
             mY = y
-            signature.addCoord(Coord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt()))
+            signature.addCoord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt())
         }
     }
 

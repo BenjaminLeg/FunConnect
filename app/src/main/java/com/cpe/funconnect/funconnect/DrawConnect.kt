@@ -1,10 +1,9 @@
 package com.cpe.funconnect.funconnect
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*
 import org.json.JSONObject
 
@@ -16,22 +15,19 @@ class DrawConnect: DrawActivity() {
         attemptText.setText("Attempt : $attempt")
     }
 
-    override fun onLastReply(text : Boolean) {
-        super.onLastReply(text)
-        attempt++
-        checkAttempts(attempt)
+    override fun onLastReply(success : Boolean) {
+        super.onLastReply(success)
+        if (success){
+            val intent = Intent(this, ValidationScreenActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        else if(attempt+1 != 4){attempt++}
+        else{finish()}
         attemptText.setText("Attempt : $attempt")
     }
 
-    fun checkAttempts(attempts : Int){
-        if(attempts >= 4){
-            finish()
-        }
-    }
-
-
     override fun sendTasks(){
-        super.sendTasks()
         paintView?.visibility = View.INVISIBLE
         progress?.visibility = View.VISIBLE
         signatures.add(paintView!!.getCoord())

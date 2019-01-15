@@ -16,9 +16,9 @@ class Signature {
         this.clear()
     }
 
-    fun addCoord(coord : Coord){
-        abs.add(coord.x)
-        ord.add(coord.y)
-        time.add(coord.z)
+    fun addCoord(abs : Int, ord : Int, time : Int ){
+        this.abs.add(abs)
+        this.ord.add(ord)
+        this.time.add(time)
     }
 }

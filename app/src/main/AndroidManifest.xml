@@ -52,6 +52,8 @@
         </activity>
         <activity android:name=".DrawConnect">
         </activity>
+        <activity android:name=".ValidationScreenActivity">
+        </activity>
         <activity android:name=".Entry_Activity">
         </activity>
 

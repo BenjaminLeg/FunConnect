@@ -64,13 +64,10 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     }
 
     override fun onLastReply(text : Boolean) {
-        progress?.visibility = View.GONE
         paintView?.clear()
+        progress?.visibility = View.GONE
         paintView?.visibility = View.VISIBLE
-        Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
     }
 
-    open fun sendTasks(){
-       // jsonMaker.addCoord(paintView?.getCoord(), attempt)
-    }
+    abstract fun sendTasks()
 }
