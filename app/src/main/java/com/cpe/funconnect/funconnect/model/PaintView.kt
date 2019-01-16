@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Model
+package com.cpe.funconnect.funconnect.model
 
 import android.content.Context
 import android.graphics.*

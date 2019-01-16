@@ -1,16 +1,16 @@
-package com.cpe.funconnect.funconnect.Task
+package com.cpe.funconnect.funconnect.task
 
 
 
 import android.os.AsyncTask
-import com.cpe.funconnect.funconnect.Activities.ConnectionInterface
-import com.cpe.funconnect.funconnect.R
+import android.util.Log
+import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
 
 
-class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
+class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
 
     private lateinit var jsonObject : JSONObject
     private lateinit var connection : ConnectionInterface
@@ -21,23 +21,22 @@ class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
         this.connection = connectionInterface
     }
 
-    override fun onPreExecute() {
-        super.onPreExecute()
-    }
-
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
-        val (request, response, result) = URL_PYTHON
+        val (_, response, result) = URL_SERVER
             .httpPost()
             .header("Content-Type" to "application/json")
             .body(this.jsonObject.toString())
             .response()
 
+        Log.d(TAG, "Result: ${response.toString()}")
+
         when(result){
             is Result.Failure ->{
+                answer = result.getException().toString()
                 reply = false
             }
-            is Result.Success ->{
+            is Result.Success -> {
                 reply = true
             }
         }
@@ -51,7 +50,8 @@ class CommunicationTask() : AsyncTask<Void,Void,Boolean>() {
     }
 
     companion object {
-        val URL_PYTHON = "http://httpbin.org/post"
         val URL_SERVER = "http://httpbin.org/post"
+        private const val TAG = "RegisterTask"
+        var answer : String? = null
     }
 }

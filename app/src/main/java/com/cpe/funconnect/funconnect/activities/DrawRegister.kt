@@ -1,32 +1,33 @@
-package com.cpe.funconnect.funconnect.Activities
+package com.cpe.funconnect.funconnect.activities
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.cpe.funconnect.funconnect.Task.CommunicationTask
-import com.cpe.funconnect.funconnect.Services.MyFirebaseMessagingService
+import com.cpe.funconnect.funconnect.task.RegisterTask
+import com.cpe.funconnect.funconnect.services.MyFirebaseMessagingService
 import com.cpe.funconnect.funconnect.R
-import com.cpe.funconnect.funconnect.Model.User
+import com.cpe.funconnect.funconnect.model.User
 import kotlinx.android.synthetic.main.activity_draw.*
 import org.json.JSONObject
 
 class DrawRegister : DrawActivity() {
 
-
+    protected var registerTask: RegisterTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_draw)
         super.onCreate(savedInstanceState)
-        attemptText.setText("Registering : $attempt")
+        attemptText.text = "Registering : $attempt/5"
     }
 
     override fun onLastReply(success : Boolean) {
         super.onLastReply(success)
-        if(success){
-            Toast.makeText(this, "Correctly logged", Toast.LENGTH_LONG).show()
+        if (success){
+            Toast.makeText(this, "Registered", Toast.LENGTH_LONG).show()
+            finish()
         }
         else{
-            Toast.makeText(this, "Network issue", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, RegisterTask.answer, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -38,23 +39,23 @@ class DrawRegister : DrawActivity() {
             finish()
         }
         signatures.add(paintView!!.getCoord())
-        attemptText.setText("Registering : $attempt")
+        attemptText.text = "Registering : $attempt/5"
         paintView?.clear()
     }
 
-    fun buildRequest(){
+    private fun buildRequest(){
         paintView?.visibility = View.INVISIBLE
-        progress?.visibility = View.VISIBLE
+        progressBar?.visibility = View.VISIBLE
         user = User(
             signatures,
-            getIntent().getStringExtra("email"),
+            this.intent.getStringExtra("email"),
             MyFirebaseMessagingService.getToken(this)
         )
-        var newUser = gson.toJson(user)
-        var jsonSend = JSONObject()
+        val newUser = gson.toJson(user)
+        val jsonSend = JSONObject()
         jsonSend.put("User", JSONObject(newUser))
-        communicationTask = CommunicationTask(jsonSend, this)
-        communicationTask?.execute()
+        registerTask = RegisterTask(jsonSend, this)
+        registerTask?.execute()
     }
 
 }

@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Activities
+package com.cpe.funconnect.funconnect.activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -10,7 +10,8 @@ import android.text.TextUtils
 import android.view.View
 import android.content.Intent
 import com.cpe.funconnect.funconnect.R
-import com.cpe.funconnect.funconnect.Task.UserLoginTask
+import com.cpe.funconnect.funconnect.task.UserMailTask
+import com.cpe.funconnect.funconnect.task.UserMailTask.Companion.answer
 import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_form.*
 
@@ -22,7 +23,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private var mAuthTask: UserLoginTask? = null
+    private var mAuthTask: UserMailTask? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +75,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
             showProgress(true)
 
 
-            mAuthTask = UserLoginTask(emailStr, this)
+            mAuthTask = UserMailTask(emailStr, this)
             mAuthTask!!.execute(null as Void?)
         }
     }
@@ -95,7 +96,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
             finish()
 
         } else {
-            email.error = getString(R.string.error_email_exists)
+            email.error = answer
             email.requestFocus()
         }
     }
@@ -109,34 +110,27 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
 
-            login_form.visibility = if (show) View.GONE else View.VISIBLE
-            login_form.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 0 else 1).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        login_form.visibility = if (show) View.GONE else View.VISIBLE
-                    }
-                })
+        login_form.visibility = if (show) View.GONE else View.VISIBLE
+        login_form.animate()
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 0 else 1).toFloat())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    login_form.visibility = if (show) View.GONE else View.VISIBLE
+                }
+            })
 
-            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-            login_progress.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 1 else 0).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-                    }
-                })
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-            login_form.visibility = if (show) View.GONE else View.VISIBLE
-        }
+        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+        login_progress.animate()
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            })
     }
 
     companion object {

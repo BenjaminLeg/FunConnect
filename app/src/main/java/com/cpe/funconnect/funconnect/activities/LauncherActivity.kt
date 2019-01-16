@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Activities
+package com.cpe.funconnect.funconnect.activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity

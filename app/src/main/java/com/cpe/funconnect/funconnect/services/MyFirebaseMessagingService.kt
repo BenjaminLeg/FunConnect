@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Services
+package com.cpe.funconnect.funconnect.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,10 +9,8 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
-import com.cpe.funconnect.funconnect.Activities.DrawConnect
+import com.cpe.funconnect.funconnect.activities.DrawConnect
 import com.cpe.funconnect.funconnect.R
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.result.Result
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -72,40 +70,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
 
         getSharedPreferences("_", MODE_PRIVATE).edit().putString("fb", token).apply();
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        sendRegistrationToServer(token)
     }
     // [END on_new_token]
 
 
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM InstanceID token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private fun sendRegistrationToServer(token: String?) {
-        "http://httpbin.org/post"
-            .httpPost()
-            .header("Content-Type" to "application/json")
-            .body("token: \"$token\"")
-            .response{
-                    request, response, result ->
-                when (result){
-                   is  Result.Failure ->{
-
-                   }
-                   is Result.Success ->{
-
-                   }
-                }
-
-            }
-    }
 
     /**
      * Create and show a simple notification containing the received FCM message.

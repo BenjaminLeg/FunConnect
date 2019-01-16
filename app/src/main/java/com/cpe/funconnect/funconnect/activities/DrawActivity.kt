@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Activities
+package com.cpe.funconnect.funconnect.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,10 +8,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.cpe.funconnect.funconnect.*
-import com.cpe.funconnect.funconnect.Model.PaintView
-import com.cpe.funconnect.funconnect.Model.Signature
-import com.cpe.funconnect.funconnect.Model.User
-import com.cpe.funconnect.funconnect.Task.CommunicationTask
+import com.cpe.funconnect.funconnect.model.PaintView
+import com.cpe.funconnect.funconnect.model.Signature
+import com.cpe.funconnect.funconnect.model.User
+import com.cpe.funconnect.funconnect.task.RegisterTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*
@@ -21,26 +21,23 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
 
 
     protected var paintView: PaintView? = null
-    protected var communicationTask: CommunicationTask? = null
-    protected var progress: ProgressBar? = null
-    protected var attempt: Int = 0
+    protected var progressBar: ProgressBar? = null
+    protected var attempt: Int = 1
     protected var user : User? = null
     protected lateinit var gson : Gson
     protected lateinit var signatures : ArrayList<Signature>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        paintView = findViewById(R.id.paintView) as PaintView
-        progress = findViewById(R.id.progressBar) as ProgressBar
-        attempt = 1
+        paintView = findViewById(R.id.paintView)
+        progressBar = findViewById(R.id.progressBar)
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
-        var paint = paintView
-        paint?.init(metrics)
-        signatures = ArrayList<Signature>()
+        paintView?.init(metrics)
+        signatures = ArrayList()
 
         gson = Gson()
-        var gsonBuilder = GsonBuilder()
+        val gsonBuilder = GsonBuilder()
         gson = gsonBuilder.create()
 
 
@@ -56,7 +53,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.clear -> {
                 paintView?.clear()
                 return true
@@ -68,7 +65,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
 
     override fun onLastReply(success : Boolean) {
         paintView?.clear()
-        progress?.visibility = View.GONE
+        progressBar?.visibility = View.GONE
         paintView?.visibility = View.VISIBLE
     }
 

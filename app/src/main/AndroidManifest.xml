@@ -35,7 +35,7 @@
         <!-- [END fcm_default_channel] -->
 
         <activity
-                android:name=".Activities.LauncherActivity"
+                android:name=".activities.LauncherActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
@@ -45,20 +45,20 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".Activities.FormActivity"
+                android:name=".activities.FormActivity"
                 android:label="@string/title_activity_form">
         </activity>
-        <activity android:name=".Activities.DrawRegister">
+        <activity android:name=".activities.DrawRegister">
         </activity>
-        <activity android:name=".Activities.DrawConnect">
+        <activity android:name=".activities.DrawConnect">
         </activity>
-        <activity android:name=".Activities.ValidationScreenActivity"
+        <activity android:name=".activities.ValidationScreenActivity"
                   android:theme="@style/Theme.Design.NoActionBar">
         </activity>
-        <activity android:name=".Activities.Entry_Activity">
+        <activity android:name=".activities.Entry_Activity">
         </activity>
 
-        <service android:name=".Services.MyFirebaseMessagingService"
+        <service android:name=".services.MyFirebaseMessagingService"
                  android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
