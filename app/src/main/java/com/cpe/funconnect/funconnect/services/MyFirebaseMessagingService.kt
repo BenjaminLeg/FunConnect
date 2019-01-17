@@ -38,18 +38,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         remoteMessage?.data?.isNotEmpty()?.let {
-            Log.d(TAG, "Message data payload: " + remoteMessage.data)
 
-            val body : String = "body"
-            sendNotification(remoteMessage.data.get(body)!!)
+            try{
+                Log.d(TAG, "Message data payload: " + remoteMessage.data)
+
+                val body : String = "body"
+                sendNotification(remoteMessage.data.get(body)!!)
+            }catch (e : Exception){
+                Log.d(TAG, "Error receiving notification : " + e.toString())
+            }
+
         }
 
         // Check if message contains a notification payload.
+        // Not supposed to receive notifications
+        /*
         remoteMessage?.notification?.let {
             val message = it.body.toString()
             Log.d(TAG, "Message Notification Body: ${it.body}")
             sendNotification(message)
-        }
+        }*/
 
 
 

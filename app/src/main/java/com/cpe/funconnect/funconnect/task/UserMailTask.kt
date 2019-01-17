@@ -2,6 +2,7 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
+import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_EMAIL
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
@@ -24,7 +25,7 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
         when(result){
             is Result.Failure -> {
                 reply = false
-                answer = result.getException().toString()
+                answer = response.statusCode.toString()
             }
             is Result.Success -> {
                 //Replace if condition with the correct expected output
@@ -48,9 +49,6 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
     }
 
     companion object {
-
-        //Replace with the expected URL
-        val URL_EMAIL = "http://httpbin.org/get"
         private const val TAG = "UserMailTask"
         var answer : String? = null
     }

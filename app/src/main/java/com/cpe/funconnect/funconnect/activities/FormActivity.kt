@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.content.Intent
+import android.widget.Toast
 import com.cpe.funconnect.funconnect.R
 import com.cpe.funconnect.funconnect.task.UserMailTask
 import com.cpe.funconnect.funconnect.task.UserMailTask.Companion.answer
@@ -32,8 +33,6 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
         // Set up the login form.
         email_sign_in_button.setOnClickListener { attemptLogin() }
     }
-
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -96,8 +95,17 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
             finish()
 
         } else {
-            email.error = answer
-            email.requestFocus()
+            handleError(answer)
+        }
+    }
+
+    private fun handleError(answer: String?) {
+        when(answer){
+            "404" -> {Toast.makeText(this, "Internet issue", Toast.LENGTH_LONG).show()}
+            "400" -> {Toast.makeText(this, "Bad request", Toast.LENGTH_LONG).show()}
+            "Email already exists" -> {email.error = UserMailTask.answer
+                email.requestFocus()}
+            else -> {Toast.makeText(this, "Internal issue", Toast.LENGTH_LONG).show()}
         }
     }
 

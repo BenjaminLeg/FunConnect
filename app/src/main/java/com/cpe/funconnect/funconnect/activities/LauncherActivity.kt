@@ -16,6 +16,7 @@ class LauncherActivity : AppCompatActivity() {
     internal val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
             FirebaseMessaging.getInstance().isAutoInitEnabled = true
+            // Replace with FormActivity once the server is online
             val intent = Intent(applicationContext, Entry_Activity::class.java)
             startActivity(intent)
             finish()

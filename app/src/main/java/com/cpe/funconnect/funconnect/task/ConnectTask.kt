@@ -2,7 +2,10 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
+import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_PYTHON
+import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_VERIFY
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
+import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
@@ -21,8 +24,8 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
-        var message = ""
 
+        //Ask for token while sending signature
         val (_, response, result) = URL_PYTHON
             .httpPost()
             .header("Content-Type" to "application/json")
@@ -37,31 +40,42 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                 reply = false
             }
             is Result.Success ->{
-                val token = response.data.get(0)
-                while (message != "verified" || answer != "No Internet connexion"){
-                    val (_, responseJWT, resultJWT) = URL_PYTHON
-                        .httpPost()
-                        .header("Content-Type" to "application/json",
-                            "JWT" to token)
-                        .response()
+                try{
+                    val token = response.data.get(0).toString()
+                    reply = verificationReturn(token)
+                }catch (ex : Exception){
+                    Log.d(TAG, "Error while opening token : " + ex.toString())
+                }
+            }
+        }
+        return reply
+    }
 
-                    when(resultJWT) {
-                        is Result.Failure -> {
-                            answer = "No Internet connexion"
-                            reply = false
-                        }
-                        is Result.Success -> {
-                            message = responseJWT.data.get(0).toString()
-                            reply = true
-                            if(message != "verified"){
-                                sleep(500)
-                            }
-                        }
+    private fun verificationReturn(token: String): Boolean {
+        //Spamming Python server to get the reply
+        var message = ""
+        var reply = false
+        while (!message.equals("verified") && answer != "No Internet connexion"){
+            val (_, responseJWT, resultJWT) = URL_VERIFY
+                .httpGet()
+                .header("Content-Type" to "application/json",
+                    "JWT" to token)
+                .response()
+
+            when(resultJWT) {
+                is Result.Failure -> {
+                    answer = "No Internet connexion"
+                    reply = false
+                }
+                is Result.Success -> {
+                    message = "verified"
+                    reply = true
+                    if(message != "verified"){
+                        sleep(500)
                     }
                 }
             }
         }
-
         return reply
     }
 
@@ -71,7 +85,6 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
     }
 
     companion object {
-        val URL_PYTHON = "http://httpbin.org/post"
         private const val TAG = "RegisterTask"
         var answer : String? = null
     }

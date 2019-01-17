@@ -9,14 +9,13 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView
+    <ImageView
             android:id="@+id/fullscreen_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher"
+            android:padding="70dp"
             android:gravity="center"
-            android:keepScreenOn="true"
-            android:text="Welcome"
-            android:textColor="#000"
-            android:textSize="25sp" />
+            android:keepScreenOn="true"/>
 
 </FrameLayout>
