@@ -4,7 +4,7 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
-import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_SERVER
+import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_SERVER
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result

@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect
+package com.cpe.funconnect.funconnect.Utils
 
 class EnvironmentVariables {
     companion object {
@@ -7,5 +7,4 @@ class EnvironmentVariables {
         const val URL_EMAIL = "http://httpbin.org/get"
         const val URL_VERIFY = "http://httpbin.org/get"
     }
-
 }

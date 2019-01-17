@@ -2,8 +2,8 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
-import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_PYTHON
-import com.cpe.funconnect.funconnect.EnvironmentVariables.Companion.URL_VERIFY
+import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_PYTHON
+import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_VERIFY
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
@@ -55,7 +55,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
         //Spamming Python server to get the reply
         var message = ""
         var reply = false
-        while (!message.equals("verified") && answer != "No Internet connexion"){
+        while (message != "verified" && answer != "No Internet connexion"){
             val (_, responseJWT, resultJWT) = URL_VERIFY
                 .httpGet()
                 .header("Content-Type" to "application/json",

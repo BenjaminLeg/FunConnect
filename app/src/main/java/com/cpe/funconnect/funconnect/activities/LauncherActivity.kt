@@ -1,5 +1,6 @@
 package com.cpe.funconnect.funconnect.activities
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,13 +13,19 @@ class LauncherActivity : AppCompatActivity() {
 
     private var mDelayHandler: Handler? = null
     private val SPLASH_DELAY: Long = 3000 //3 seconds
+    private var nextIntent : Intent? = null
 
-    internal val mRunnable: Runnable = Runnable {
+    private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
             FirebaseMessaging.getInstance().isAutoInitEnabled = true
-            // Replace with FormActivity once the server is online
-            val intent = Intent(applicationContext, Entry_Activity::class.java)
-            startActivity(intent)
+            if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
+                nextIntent = Intent(applicationContext, IdleActivity::class.java)
+            }
+            else{
+                // Replace with FormActivity once the server is online
+                nextIntent = Intent(applicationContext, Entry_Activity::class.java)
+            }
+            startActivity(nextIntent)
             finish()
         }
     }
