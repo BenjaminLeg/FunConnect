@@ -7,8 +7,13 @@
         android:orientation="vertical"
         tools:context=".activities.DrawActivity">
 
-
-    <LinearLayout android:layout_width="match_parent"
+    <include layout="@layout/activity_validation"
+             android:id="@+id/validation"
+             android:visibility="gone"
+    />
+    <LinearLayout
+            android:id="@+id/drawLayout"
+            android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:layout_weight="1">

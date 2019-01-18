@@ -59,7 +59,7 @@
         </activity>
         <activity
                 android:name=".activities.ValidationScreenActivity"
-                android:theme="@style/Theme.Design.NoActionBar">
+                android:theme="@style/AppThemeNoActionBar">
         </activity>
         <activity android:name=".activities.Entry_Activity">
         </activity>
