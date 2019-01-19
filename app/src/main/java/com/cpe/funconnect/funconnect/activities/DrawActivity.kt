@@ -82,9 +82,14 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
         gson = Gson()
         val gsonBuilder = GsonBuilder()
         gson = gsonBuilder.create()
-        user = User(intent.getStringExtra("email"),
-            MyFirebaseMessagingService.getToken(this))
-
+        if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
+            user = User(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"),
+                MyFirebaseMessagingService.getToken(this))
+        }
+        else{
+            user = User(intent.getStringExtra("email"),
+                MyFirebaseMessagingService.getToken(this))
+        }
         sendSig.setOnClickListener {
             sendTasks()
         }

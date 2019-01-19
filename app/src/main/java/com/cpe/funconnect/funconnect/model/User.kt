@@ -5,8 +5,8 @@ class User {
 
     private var attempt : Int = 1
     private var signatures: ArrayList<Signature>? = null
-    private var email: String? = null
-    private var token: String? = null
+    private val email: String
+    private val token: String
 
     constructor(email: String, token: String){
         this.email = email
