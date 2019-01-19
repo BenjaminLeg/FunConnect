@@ -11,6 +11,7 @@ import android.view.View
 import android.content.Intent
 import android.widget.Toast
 import com.cpe.funconnect.funconnect.R
+import com.cpe.funconnect.funconnect.Utils.Utils.Companion.handleError
 import com.cpe.funconnect.funconnect.task.UserMailTask
 import com.cpe.funconnect.funconnect.task.UserMailTask.Companion.answer
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -25,7 +26,6 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserMailTask? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,36 +79,54 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
         }
     }
 
+    /**
+     * Checks email's characters to avoid bad entries
+     * */
     private fun isEmailValid(email: String): Boolean {
         return EMAIL_REGEX.toRegex().matches(email);
     }
 
+    /**
+     * Handles reply from the server :
+     *  - if responseCode is not 200 -> toast error
+     *  - if invalid mail -> focus input line to try again
+     *  - if successful attempt -> go to the RegisterActivity
+     * */
     override fun onLastReply(success: Boolean) {
         mAuthTask = null
         showProgress(false)
 
         if (success) {
-            val intent = Intent(this, DrawRegister::class.java)
-            getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", email.text.toString()).apply();
-            intent.putExtra("email", email.text.toString())
-            startActivity(intent)
-            finish()
-
+            onSuccessReply()
         } else {
-            handleError(answer)
+            onFailureReply()
         }
     }
 
-    private fun handleError(answer: String?) {
-        when(answer){
-            "404" -> {Toast.makeText(this, "Internet issue", Toast.LENGTH_LONG).show()}
-            "400" -> {Toast.makeText(this, "Bad request", Toast.LENGTH_LONG).show()}
-            "Email already exists" -> {email.error = UserMailTask.answer
-                email.requestFocus()}
-            else -> {Toast.makeText(this, "Internal issue", Toast.LENGTH_LONG).show()}
-        }
+    /**
+     * Changes activity to the RegisterActivity and kill this one
+     * Gives the mail address as an Intent parameter
+     * */
+    private fun onSuccessReply(){
+        val intent = Intent(this, DrawRegister::class.java)
+        intent.putExtra("email", email.text.toString())
+        startActivity(intent)
+        finish()
     }
 
+    /**
+     * Checks the response code and toasts the issue
+     * If wrong Email -> focus on the input line
+     * */
+    private fun onFailureReply(){
+        if (answer != "Email already exists"){
+            handleError(this, answer)
+        }
+        else{
+            email.error = UserMailTask.answer
+            email.requestFocus()
+        }
+    }
 
     /**
      * Shows the progress UI and hides the login form.

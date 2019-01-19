@@ -81,8 +81,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
     // [END on_new_token]
 
-
-
     /**
      * Create and show a simple notification containing the received FCM message.
      *

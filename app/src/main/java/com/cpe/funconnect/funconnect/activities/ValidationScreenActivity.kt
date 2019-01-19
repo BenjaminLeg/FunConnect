@@ -1,12 +1,11 @@
 package com.cpe.funconnect.funconnect.activities
 
-import android.graphics.drawable.AnimatedStateListDrawable
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.cpe.funconnect.funconnect.R
-import kotlinx.android.synthetic.main.activity_validation.*
+import kotlinx.android.synthetic.main.validation_layout.*
 
 
 
@@ -27,7 +26,7 @@ class ValidationScreenActivity: AppCompatActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_validation)
+        setContentView(R.layout.validation_layout)
 
         //Initialize the Handler
         mDelayHandler = Handler()

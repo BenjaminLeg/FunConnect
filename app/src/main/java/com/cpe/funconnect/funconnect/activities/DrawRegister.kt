@@ -1,13 +1,15 @@
 package com.cpe.funconnect.funconnect.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.cpe.funconnect.funconnect.task.RegisterTask
-import com.cpe.funconnect.funconnect.services.MyFirebaseMessagingService
 import com.cpe.funconnect.funconnect.R
-import com.cpe.funconnect.funconnect.model.User
+import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables
+import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_draw.*
+import kotlinx.android.synthetic.main.activity_form.*
 import org.json.JSONObject
 
 class DrawRegister : DrawActivity() {
@@ -17,13 +19,16 @@ class DrawRegister : DrawActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_draw)
         super.onCreate(savedInstanceState)
-        attemptText.text = "Registering : $attempt/5"
+        attemptText.text = "Registering : ${user?.getAttempt()}/${EnvironmentVariables.ATTEMPT_REGISTER}"
     }
 
     override fun onLastReply(success : Boolean) {
         super.onLastReply(success)
         if (success){
+            getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", user?.getEmail()).apply()
             Toast.makeText(this, "Registered", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, IdleActivity::class.java)
+            startActivity(intent)
             finish()
         }
         else{
@@ -33,25 +38,19 @@ class DrawRegister : DrawActivity() {
 
 
     override fun sendTasks(){
-        if(attempt+1 != 6){attempt++}
+        if(user!!.getAttempt() != EnvironmentVariables.ATTEMPT_REGISTER){user!!.addAttempt()}
         else{
             buildRequest()
-            finish()
         }
-        signatures.add(paintView!!.getCoord())
-        attemptText.text = "Registering : $attempt/5"
+        user?.addSignature(paintView!!.getCoord())
+        attemptText.text = "Registering : ${user?.getAttempt()}/${EnvironmentVariables.ATTEMPT_REGISTER}"
         paintView?.clear()
     }
 
     private fun buildRequest(){
         paintView?.visibility = View.INVISIBLE
         progressBar?.visibility = View.VISIBLE
-        user = User(
-            signatures,
-            this.intent.getStringExtra("email"),
-            MyFirebaseMessagingService.getToken(this)
-        )
-        val newUser = gson.toJson(user)
+        val newUser = gson!!.toJson(user)
         val jsonSend = JSONObject()
         jsonSend.put("User", JSONObject(newUser))
         registerTask = RegisterTask(jsonSend, this)

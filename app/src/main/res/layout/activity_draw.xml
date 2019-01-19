@@ -7,7 +7,7 @@
         android:orientation="vertical"
         tools:context=".activities.DrawActivity">
 
-    <include layout="@layout/activity_validation"
+    <include layout="@layout/validation_layout"
              android:id="@+id/validation"
              android:visibility="gone"
     />

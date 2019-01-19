@@ -15,13 +15,13 @@
                       android:orientation="vertical">
 
                 <ImageView android:id="@+id/expandcollapse"
-                           android:layout_width="300dp"
-                           android:layout_height="300dp"
+                           android:layout_width="350dp"
+                           android:layout_height="350dp"
                            android:layout_margin="4dp"
                            android:contentDescription="@null"
                            android:scaleType="fitCenter"
                            android:layout_gravity="center"
-                           android:background="@drawable/avd_checkable_expandcollapse_expanded_to_collapsed"/>
+                           android:background="@drawable/avd_checkable_checkbox_unchecked_to_checked"/>
 
                 <TextView
                         android:id="@+id/fullscreen_text_content"

@@ -51,7 +51,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         strokeWidth = BRUSH_SIZE
     }
 
-    public fun getCoord(): Signature {
+    fun getCoord(): Signature {
         return this.signature
     }
 

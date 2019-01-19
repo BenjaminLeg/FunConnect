@@ -47,7 +47,7 @@
         </activity>
         <activity
                 android:name=".activities.FormActivity"
-                android:label="@string/title_activity_form">
+                android:label="@string/email_register_message">
         </activity>
         <activity
                 android:name=".activities.DrawRegister"
@@ -60,8 +60,6 @@
         <activity
                 android:name=".activities.ValidationScreenActivity"
                 android:theme="@style/AppThemeNoActionBar">
-        </activity>
-        <activity android:name=".activities.Entry_Activity">
         </activity>
 
         <service

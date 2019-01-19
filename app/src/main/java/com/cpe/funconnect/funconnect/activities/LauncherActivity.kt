@@ -23,7 +23,7 @@ class LauncherActivity : AppCompatActivity() {
             }
             else{
                 // Replace with FormActivity once the server is online
-                nextIntent = Intent(applicationContext, Entry_Activity::class.java)
+                nextIntent = Intent(applicationContext, FormActivity::class.java)
             }
             startActivity(nextIntent)
             finish()
