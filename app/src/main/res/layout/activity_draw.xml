@@ -11,6 +11,10 @@
              android:id="@+id/validation"
              android:visibility="gone"
     />
+    <include layout="@layout/invalidation_layout"
+             android:id="@+id/invalidation"
+             android:visibility="gone"
+    />
     <LinearLayout
             android:id="@+id/drawLayout"
             android:layout_width="match_parent"
