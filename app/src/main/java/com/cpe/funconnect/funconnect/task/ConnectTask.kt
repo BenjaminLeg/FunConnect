@@ -81,7 +81,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
     override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
-        connection.onLastReply(result)
+        connection.onPostReply(result)
     }
 
     companion object {

@@ -26,7 +26,7 @@ class DrawConnect: DrawActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_draw)
         super.onCreate(savedInstanceState)
-        attemptText.text = "Attempt : ${user?.getAttempt()}"
+        attemptText.text = getString(R.string.Attempt, user!!.getAttempt(), EnvironmentVariables.MAX_ATTEMPT_CONNECT)
         expandcollapse.apply {
             rocketAnimation = background as AnimatedVectorDrawable
         }
@@ -38,8 +38,8 @@ class DrawConnect: DrawActivity() {
         }
     }
 
-    override fun onLastReply(success : Boolean) {
-        super.onLastReply(success)
+    override fun onPostReply(success : Boolean) {
+        super.onPostReply(success)
         if (success){
 
             //Initialize the Handler
@@ -60,7 +60,7 @@ class DrawConnect: DrawActivity() {
                 }
             }
             else{finish()}
-            attemptText.text = "Attempt : ${user?.getAttempt()}"
+            attemptText.text = getString(R.string.Attempt, user!!.getAttempt(), EnvironmentVariables.MAX_ATTEMPT_CONNECT)
             Toast.makeText(this, answer, Toast.LENGTH_LONG).show()
         }
 

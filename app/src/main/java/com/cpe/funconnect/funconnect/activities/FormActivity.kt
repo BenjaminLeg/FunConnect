@@ -90,14 +90,14 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      *  - if invalid mail -> focus input line to try again
      *  - if successful attempt -> go to the RegisterActivity
      * */
-    override fun onLastReply(success: Boolean) {
+    override fun onPostReply(success: Boolean) {
         mAuthTask = null
         showProgress(false)
 
         if (success) {
-            onFailureReply()
-        } else {
             onSuccessReply()
+        } else {
+            onFailureReply()
         }
     }
 
@@ -106,8 +106,10 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * Gives the mail address as an Intent parameter
      * */
     private fun onSuccessReply(){
-        email.error = UserMailTask.answer
-        email.requestFocus()
+        val intent = Intent(this, DrawRegister::class.java)
+        intent.putExtra("email", email.text.toString())
+        startActivity(intent)
+        finish()
     }
 
     /**
@@ -115,14 +117,12 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * If wrong Email -> focus on the input line
      * */
     private fun onFailureReply(){
-        if (answer == "-1"){
-            val intent = Intent(this, DrawRegister::class.java)
-            intent.putExtra("email", email.text.toString())
-            startActivity(intent)
-            finish()
+        if (answer != "Email already exists"){
+            handleError(this, answer)
         }
         else{
-            handleError(this, answer)
+            email.error = UserMailTask.answer
+            email.requestFocus()
         }
     }
 

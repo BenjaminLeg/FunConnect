@@ -59,7 +59,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
      * Handles reply from asyncTask connexion
      * To be further implemented inside the derived classes
      */
-    override fun onLastReply(success : Boolean) {
+    override fun onPostReply(success : Boolean) {
         paintView?.clear()
         progressBar?.visibility = View.GONE
         paintView?.visibility = View.VISIBLE

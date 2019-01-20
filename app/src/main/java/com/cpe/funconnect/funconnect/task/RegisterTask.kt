@@ -4,7 +4,6 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
-import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_SERVER
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -26,7 +25,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
         var reply = false
 
         Log.d(TAG, "Sent data: ${this.jsonObject.toString()}")
-        val (request, response, result) = "http://localhost:3030/register"
+        val (request, response, result) = "http://10.0.2.2:3030/register"
             .httpPost()
             .header("Content-Type" to "application/json")
             .body(this.jsonObject.toString())
@@ -37,7 +36,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
 
         when(result){
             is Result.Failure ->{
-                answer = result.getException().toString()
+                answer = response.statusCode.toString()
                 reply = false
             }
             is Result.Success -> {
@@ -50,7 +49,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
 
     override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
-        connection.onLastReply(result)
+        connection.onPostReply(result)
     }
 
     companion object {

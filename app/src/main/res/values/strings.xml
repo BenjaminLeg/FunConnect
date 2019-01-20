@@ -37,4 +37,6 @@
     <string name="hippo_text">Hippo</string>
     <string name="buffalo_text">Buffalo</string>
     <string name="elephant_text">Elephant</string>
+    <string name="Register">Register : %1$d /%2$d</string>
+    <string name="Attempt">Attempt : %1$d /%2$d</string>
 </resources>
