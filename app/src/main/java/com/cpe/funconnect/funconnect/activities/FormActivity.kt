@@ -9,12 +9,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.content.Intent
-import android.widget.Toast
 import com.cpe.funconnect.funconnect.R
-import com.cpe.funconnect.funconnect.Utils.Utils.Companion.handleError
+import com.cpe.funconnect.funconnect.utils.Utils.Companion.handleError
 import com.cpe.funconnect.funconnect.task.UserMailTask
 import com.cpe.funconnect.funconnect.task.UserMailTask.Companion.answer
-import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_form.*
 
 /**
@@ -97,9 +95,9 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
         showProgress(false)
 
         if (success) {
-            onSuccessReply()
-        } else {
             onFailureReply()
+        } else {
+            onSuccessReply()
         }
     }
 
@@ -108,10 +106,8 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * Gives the mail address as an Intent parameter
      * */
     private fun onSuccessReply(){
-        val intent = Intent(this, DrawRegister::class.java)
-        intent.putExtra("email", email.text.toString())
-        startActivity(intent)
-        finish()
+        email.error = UserMailTask.answer
+        email.requestFocus()
     }
 
     /**
@@ -119,12 +115,14 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * If wrong Email -> focus on the input line
      * */
     private fun onFailureReply(){
-        if (answer != "Email already exists"){
-            handleError(this, answer)
+        if (answer == "-1"){
+            val intent = Intent(this, DrawRegister::class.java)
+            intent.putExtra("email", email.text.toString())
+            startActivity(intent)
+            finish()
         }
         else{
-            email.error = UserMailTask.answer
-            email.requestFocus()
+            handleError(this, answer)
         }
     }
 

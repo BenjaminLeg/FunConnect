@@ -2,8 +2,8 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
-import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_PYTHON
-import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_VERIFY
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_PYTHON
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_VERIFY
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost

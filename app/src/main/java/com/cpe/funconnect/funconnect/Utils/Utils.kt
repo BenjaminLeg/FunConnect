@@ -1,4 +1,4 @@
-package com.cpe.funconnect.funconnect.Utils
+package com.cpe.funconnect.funconnect.utils
 
 import android.content.Context
 import android.widget.Toast

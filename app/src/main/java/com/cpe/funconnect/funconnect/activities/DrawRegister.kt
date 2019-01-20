@@ -6,10 +6,9 @@ import android.view.View
 import android.widget.Toast
 import com.cpe.funconnect.funconnect.task.RegisterTask
 import com.cpe.funconnect.funconnect.R
-import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_draw.*
-import kotlinx.android.synthetic.main.activity_form.*
 import org.json.JSONObject
 
 class DrawRegister : DrawActivity() {
@@ -52,7 +51,7 @@ class DrawRegister : DrawActivity() {
         progressBar?.visibility = View.VISIBLE
         val newUser = gson!!.toJson(user)
         val jsonSend = JSONObject()
-        jsonSend.put("User", JSONObject(newUser))
+        jsonSend.put("userRegistrationRequest", JSONObject(newUser))
         registerTask = RegisterTask(jsonSend, this)
         registerTask?.execute()
     }

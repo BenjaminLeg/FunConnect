@@ -1,12 +1,13 @@
-package com.cpe.funconnect.funconnect.Utils
+package com.cpe.funconnect.funconnect.utils
 
 class EnvironmentVariables {
     companion object {
-        const val URL_PYTHON = "http://httpbin.org/post"
-        const val URL_SERVER = "http://httpbin.org/post"
-        const val URL_EMAIL = "http://httpbin.org/get"
-        const val URL_VERIFY = "http://httpbin.org/get"
+        const val URL_PYTHON = "http://localhost:3030/register"
+        const val URL_SERVER = "http://localhost:3030/register"
+        const val URL_EMAIL = "http://localhost:3030/userExists/"
+        const val URL_VERIFY = "http://localhost:3030/register"
         const val MAX_ATTEMPT_CONNECT = 3
         const val ATTEMPT_REGISTER = 5
+        const val SPLASH_DELAY: Long = 3000 //3 seconds
     }
 }

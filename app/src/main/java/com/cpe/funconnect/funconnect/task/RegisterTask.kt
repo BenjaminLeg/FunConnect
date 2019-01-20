@@ -4,7 +4,7 @@ package com.cpe.funconnect.funconnect.task
 
 import android.os.AsyncTask
 import android.util.Log
-import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables.Companion.URL_SERVER
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_SERVER
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -24,12 +24,15 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
 
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
-        val (_, response, result) = URL_SERVER
+
+        Log.d(TAG, "Sent data: ${this.jsonObject.toString()}")
+        val (request, response, result) = "http://localhost:3030/register"
             .httpPost()
             .header("Content-Type" to "application/json")
             .body(this.jsonObject.toString())
             .response()
 
+        Log.d(TAG, "Request : ${request.toString()}")
         Log.d(TAG, "Result: ${response.toString()}")
 
         when(result){

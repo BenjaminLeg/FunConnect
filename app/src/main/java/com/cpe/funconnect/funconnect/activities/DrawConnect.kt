@@ -9,18 +9,18 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import com.cpe.funconnect.funconnect.*
-import com.cpe.funconnect.funconnect.Utils.EnvironmentVariables
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import com.cpe.funconnect.funconnect.task.ConnectTask
 import com.cpe.funconnect.funconnect.task.RegisterTask.Companion.answer
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.SPLASH_DELAY
 import kotlinx.android.synthetic.main.activity_draw.*
 import kotlinx.android.synthetic.main.validation_layout.*
 import org.json.JSONObject
 
 class DrawConnect: DrawActivity() {
 
-    protected var connectTask: ConnectTask? = null
+    private var connectTask: ConnectTask? = null
     private var mDelayHandler: Handler? = null
-    private val SPLASH_DELAY: Long = 4000 //4 seconds
     private lateinit var rocketAnimation: AnimatedVectorDrawable
 
     override fun onCreate(savedInstanceState: Bundle?) {

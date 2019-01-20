@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.cpe.funconnect.funconnect.R
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.SPLASH_DELAY
 import com.google.firebase.messaging.FirebaseMessaging
 
 
 class LauncherActivity : AppCompatActivity() {
 
     private var mDelayHandler: Handler? = null
-    private val SPLASH_DELAY: Long = 3000 //3 seconds
     private var nextIntent : Intent? = null
 
     private val mRunnable: Runnable = Runnable {
