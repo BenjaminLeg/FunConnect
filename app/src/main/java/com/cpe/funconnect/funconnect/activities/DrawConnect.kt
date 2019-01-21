@@ -57,7 +57,7 @@ class DrawConnect: DrawActivity() {
     override fun sendTasks(){
         showProgress(true)
         userControl?.addSignature(paintView!!.getCoord())
-        connectTask = ConnectTask(JSONObject(gson!!.toJson(userControl)), this)
+        connectTask = ConnectTask(JSONObject(gson!!.toJson(userControl!!.getSignature(0))), this)
         connectTask?.execute()
     }
 

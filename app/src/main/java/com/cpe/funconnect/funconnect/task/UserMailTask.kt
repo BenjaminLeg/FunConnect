@@ -17,12 +17,12 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
     override fun doInBackground(vararg params: Void): Boolean? {
         var reply = false
         try {
-            val (_, response, result)= (URL_EMAIL + mEmail)
+            val (request, response, result)= (URL_EMAIL + mEmail)
                 .httpGet()
                 .responseObject(emailExists.Deserializer())
-
-
-            Log.d(TAG, result.component1().toString())
+            Log.d(TAG, request.toString())
+            Log.d(TAG, response.toString())
+            Log.d(TAG, result.component1()?.exists.toString())
             reply = handleAnswer(response, result)
         }catch (e : Exception){
             Log.d(TAG, "Error occurred : "+ e.toString())
@@ -35,12 +35,10 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
      * Checks status code
      * If 200 -> Checks to body of the reply
      */
-    private fun handleAnswer(response : Response, result: Result<Any, Exception>) : Boolean {
+    private fun handleAnswer(response : Response, result: Result<emailExists, Exception>) : Boolean {
 
-        var hello = response.toString()
+        var retour = result.component1()!!.exists
         var reply = false
-
-        Log.d(TAG, "Response : $hello")
 
         when (result) {
             is Result.Failure -> {
@@ -49,11 +47,11 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
             }
             is Result.Success -> {
                 //Replace if condition with the correct expected output
-                if (hello.contains("false")) {
-                    reply = true
-                } else {
+                if (retour) {
                     reply = false
                     answer = "Email already exists"
+                } else {
+                    reply = true
                 }
 
             }

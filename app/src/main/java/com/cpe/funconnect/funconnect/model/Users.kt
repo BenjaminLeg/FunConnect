@@ -5,4 +5,5 @@ interface Users {
     fun getAttempt(): Int
     fun addAttempt()
     fun getEmail(): String?
+    fun getSignature(indice : Int): Traces
 }

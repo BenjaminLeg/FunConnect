@@ -7,8 +7,8 @@ data class emailExists (
     var email:String,
     var exists:Boolean
 ){
-    class Deserializer : ResponseDeserializable<Array<emailExists>> {
-        override fun deserialize(content: String): Array<emailExists>
-                = Gson().fromJson(content, Array<emailExists>::class.java)
+    class Deserializer : ResponseDeserializable<emailExists> {
+        override fun deserialize(content: String): emailExists
+                = Gson().fromJson(content, emailExists::class.java)
     }
 }

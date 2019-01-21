@@ -69,7 +69,7 @@ class DrawRegister : DrawActivity() {
      */
     private fun buildRequest(){
         showProgress()
-        registerTask = RegisterTask(JSONObject(gson!!.toJson(userControl)), this)
+        registerTask = RegisterTask(JSONObject(gson!!.toJson(userControl!!.getUser())), this)
         registerTask?.execute()
     }
 

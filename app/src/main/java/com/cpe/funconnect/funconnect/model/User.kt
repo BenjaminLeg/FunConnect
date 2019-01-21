@@ -2,7 +2,6 @@ package com.cpe.funconnect.funconnect.model
 
 
 class User: Users {
-
     private var attempt : Int = 1
     private var signatures: ArrayList<Traces>? = null
     private val email: String
@@ -28,5 +27,9 @@ class User: Users {
 
     override fun getEmail(): String? {
         return this.email
+    }
+
+    override fun getSignature(indice : Int): Traces {
+        return signatures!![indice]
     }
 }

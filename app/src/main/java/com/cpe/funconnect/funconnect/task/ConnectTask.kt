@@ -5,6 +5,8 @@ import android.util.Log
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_PYTHON
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_VERIFY
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
+import com.cpe.funconnect.funconnect.data.idReturn
+import com.cpe.funconnect.funconnect.data.pythonReturn
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -31,7 +33,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                 .httpPost()
                 .header("Content-Type" to "application/json")
                 .body(this.jsonObject.toString())
-                .response()
+                .responseObject(idReturn.Deserializer())
 
             Log.d(TAG, "Result: ${result.toString()}")
 
@@ -42,7 +44,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                 }
                 is Result.Success ->{
                     try{
-                        val token = response.data.get(0).toString()
+                        val token = result.component1()!!.task_id
                         reply = verificationReturn(token)
                     }catch (ex : Exception){
                         Log.d(TAG, "Error while opening token : " + ex.toString())
@@ -62,11 +64,10 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
         var message = ""
         var reply = false
         while (message != "verified" && answer != "No internet connection"){
-            val (_, responseJWT, resultJWT) = URL_VERIFY
+            val (_, responseJWT, resultJWT) = (URL_VERIFY + token)
                 .httpGet()
-                .header("Content-Type" to "application/json",
-                    "JWT" to token)
-                .response()
+                .header("Content-Type" to "application/json")
+                .responseObject(pythonReturn.Deserializer())
 
             when(resultJWT) {
                 is Result.Failure -> {
@@ -74,12 +75,12 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                     reply = false
                 }
                 is Result.Success -> {
-                    message = responseJWT.data.toString()
-                    if(!message.contains("verified")){
+                    message = resultJWT.component1()!!.status
+                    if(message == "PENDING"){
                         sleep(500)
                     }
                     else{
-                        reply = checkResponse(message)
+                        reply = checkResponse(resultJWT.component1()!!.isAuthOK)
                     }
                 }
             }
@@ -87,9 +88,9 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
         return reply
     }
 
-    private fun checkResponse(message: String) : Boolean {
+    private fun checkResponse(messageOK: Boolean) : Boolean {
         var reply = false
-        if(message.contains("true")){
+        if(messageOK){
             reply = true
         }
         else{

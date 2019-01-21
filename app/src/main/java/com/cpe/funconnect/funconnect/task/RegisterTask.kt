@@ -27,15 +27,13 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
         try {
-            Log.d(TAG, "Sent data: ${this.jsonObject.toString()}")
-            val (request, response, result) = URL_SERVER
+            val (_, response, result) = URL_SERVER
                 .httpPost()
                 .header("Content-Type" to "application/json")
                 .body(this.jsonObject.toString())
                 .responseObject(registrationValid.Deserializer())
 
-            Log.d(TAG, "Request : ${request.toString()}")
-            Log.d(TAG, "Result: ${result.component1().toString()}")
+            Log.d(TAG, "Result: ${result.component1()!!.isRegistrationValid}")
 
             when (result) {
                 is Result.Failure -> {
@@ -43,7 +41,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
                     reply = false
                 }
                 is Result.Success -> {
-                    reply = true
+                    reply = result.component1()!!.isRegistrationValid
                 }
             }
         }catch (e : Exception){
