@@ -3,6 +3,7 @@ package com.cpe.funconnect.funconnect.task
 import android.os.AsyncTask
 import android.util.Log
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_EMAIL
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
@@ -14,17 +15,18 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
      */
     override fun doInBackground(vararg params: Void): Boolean? {
         var reply = false
-        val (_, response, result)= ("http://10.0.2.2:3030/userExists/" + mEmail)
-            .httpGet()
-            .response()
-
         try {
+            val (_, response, result)= (URL_EMAIL + mEmail)
+                .httpGet()
+                .response()
+
+
             reply = handleAnswer(response, result)
         }catch (e : Exception){
-            Log.d(TAG, "Error null pointer : "+ e.toString())
+            Log.d(TAG, "Error occurred : "+ e.toString())
+        }finally {
+            return reply
         }
-
-        return reply
     }
 
     /**

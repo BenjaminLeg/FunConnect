@@ -1,32 +1,32 @@
 package com.cpe.funconnect.funconnect.model
 
 
-class User {
+class User: Users {
 
     private var attempt : Int = 1
-    private var signatures: ArrayList<Signature>? = null
+    private var signatures: ArrayList<Traces>? = null
     private val email: String
     private val token: String
 
     constructor(email: String, token: String){
         this.email = email
         this.token = token
-        signatures = ArrayList<Signature>()
+        signatures = ArrayList<Traces>()
     }
 
-    fun addSignature(signature : Signature){
+    override fun addSignature(signature : Signature){
         signatures?.add(signature)
     }
 
-    fun getAttempt(): Int{
+    override fun getAttempt(): Int{
         return this.attempt
     }
 
-    fun addAttempt(){
+    override fun addAttempt(){
         this.attempt++
     }
 
-    fun getEmail(): String? {
+    override fun getEmail(): String? {
         return this.email
     }
 }

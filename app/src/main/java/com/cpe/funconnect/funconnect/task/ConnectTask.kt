@@ -25,37 +25,43 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
 
-        //Ask for token while sending signature
-        val (_, response, result) = URL_PYTHON
-            .httpPost()
-            .header("Content-Type" to "application/json")
-            .body(this.jsonObject.toString())
-            .response()
+        try{
+            //Ask for token while sending signature
+            val (_, response, result) = URL_PYTHON
+                .httpPost()
+                .header("Content-Type" to "application/json")
+                .body(this.jsonObject.toString())
+                .response()
 
-        Log.d(TAG, "Result: ${result.toString()}")
+            Log.d(TAG, "Result: ${result.toString()}")
 
-        when(result){
-            is Result.Failure ->{
-                answer = result.getException().toString()
-                reply = false
-            }
-            is Result.Success ->{
-                try{
-                    val token = response.data.get(0).toString()
-                    reply = verificationReturn(token)
-                }catch (ex : Exception){
-                    Log.d(TAG, "Error while opening token : " + ex.toString())
+            when(result){
+                is Result.Failure ->{
+                    answer = response.statusCode.toString()
+                    reply = false
+                }
+                is Result.Success ->{
+                    try{
+                        val token = response.data.get(0).toString()
+                        reply = verificationReturn(token)
+                    }catch (ex : Exception){
+                        Log.d(TAG, "Error while opening token : " + ex.toString())
+                    }
                 }
             }
+        }catch (e : java.lang.Exception){
+            Log.d(TAG, "Error occurred : " + e.toString())
+        }finally {
+            return reply
         }
-        return reply
+
     }
 
     private fun verificationReturn(token: String): Boolean {
         //Spamming Python server to get the reply
         var message = ""
         var reply = false
-        while (message != "verified" && answer != "No Internet connexion"){
+        while (message != "verified" && answer != "No internet connection"){
             val (_, responseJWT, resultJWT) = URL_VERIFY
                 .httpGet()
                 .header("Content-Type" to "application/json",
@@ -64,17 +70,30 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
             when(resultJWT) {
                 is Result.Failure -> {
-                    answer = "No Internet connexion"
+                    answer = "No internet connection"
                     reply = false
                 }
                 is Result.Success -> {
-                    message = "verified"
-                    reply = true
-                    if(message != "verified"){
+                    message = responseJWT.data.toString()
+                    if(!message.contains("verified")){
                         sleep(500)
+                    }
+                    else{
+                        reply = checkResponse(message)
                     }
                 }
             }
+        }
+        return reply
+    }
+
+    private fun checkResponse(message: String) : Boolean {
+        var reply = false
+        if(message.contains("true")){
+            reply = true
+        }
+        else{
+            answer = "invalid entry"
         }
         return reply
     }

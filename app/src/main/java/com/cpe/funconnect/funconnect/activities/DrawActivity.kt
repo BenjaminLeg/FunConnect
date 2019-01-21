@@ -9,11 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.cpe.funconnect.funconnect.*
+import com.cpe.funconnect.funconnect.controlers.userRequestControler
+import com.cpe.funconnect.funconnect.controlers.userRequestControlers
 import com.cpe.funconnect.funconnect.model.PaintView
-import com.cpe.funconnect.funconnect.model.Signature
 import com.cpe.funconnect.funconnect.model.User
 import com.cpe.funconnect.funconnect.services.MyFirebaseMessagingService
-import com.cpe.funconnect.funconnect.task.RegisterTask
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*
@@ -24,7 +24,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
 
     protected var paintView: PaintView? = null
     protected var progressBar: ProgressBar? = null
-    protected var user : User? = null
+    protected var userControl : userRequestControlers? = null
     protected var gson : Gson? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,24 +74,48 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
      * Initiate the complete view on the screen
      */
     private fun initValues(){
+        initView()
+        initGson()
+        initUser()
+
+        sendSig.setOnClickListener {
+            sendTasks()
+        }
+    }
+
+    /**
+     * Prepares the view elements
+     */
+    private fun initView(){
         paintView = findViewById(R.id.paintView)
         progressBar = findViewById(R.id.progressBar)
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
         paintView?.init(metrics)
+    }
+
+    /**
+     * Prepares the user depending on the entry point in the app
+     */
+    private fun initUser(){
+        if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
+            userControl = userRequestControler(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"),
+                MyFirebaseMessagingService.getToken(this))
+        }
+        else {
+            userControl = userRequestControler(
+                intent.getStringExtra("email"),
+                MyFirebaseMessagingService.getToken(this)
+            )
+        }
+    }
+
+    /**
+     * Prepares the Gson module
+     */
+    private fun initGson(){
         gson = Gson()
         val gsonBuilder = GsonBuilder()
         gson = gsonBuilder.create()
-        if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
-            user = User(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"),
-                MyFirebaseMessagingService.getToken(this))
-        }
-        else{
-            user = User(intent.getStringExtra("email"),
-                MyFirebaseMessagingService.getToken(this))
-        }
-        sendSig.setOnClickListener {
-            sendTasks()
-        }
     }
 }

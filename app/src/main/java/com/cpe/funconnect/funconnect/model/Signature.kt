@@ -1,6 +1,6 @@
 package com.cpe.funconnect.funconnect.model
 
-class Signature {
+class Signature: Traces {
 
     var abs : ArrayList<Int>
     var ord : ArrayList<Int>
@@ -16,7 +16,7 @@ class Signature {
         this.clear()
     }
 
-    fun addCoord(abs : Int, ord : Int, time : Int ){
+    override fun addCoord(abs : Int, ord : Int, time : Int ){
         this.abs.add(abs)
         this.ord.add(ord)
         this.time.add(time)

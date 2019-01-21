@@ -68,7 +68,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
             focusView?.requestFocus()
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the userControl login attempt.
             showProgress(true)
 
 
@@ -106,10 +106,9 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * Gives the mail address as an Intent parameter
      * */
     private fun onSuccessReply(){
-        val intent = Intent(this, DrawRegister::class.java)
-        intent.putExtra("email", email.text.toString())
-        startActivity(intent)
-        finish()
+        val intentRegister = Intent(this, DrawRegister::class.java)
+        intentRegister.putExtra("email", email.text.toString())
+        startActivity(intentRegister)
     }
 
     /**

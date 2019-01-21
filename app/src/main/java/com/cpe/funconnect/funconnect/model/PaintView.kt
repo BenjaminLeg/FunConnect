@@ -12,7 +12,7 @@ import android.view.View
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var mX: Float = 0.toFloat()
     private var mY: Float = 0.toFloat()
-    lateinit var signature : Signature
+    private lateinit var signature : Signature
     private var mPath: Path? = null
     private val mPaint: Paint
     private val paths = ArrayList<FingerPath>()

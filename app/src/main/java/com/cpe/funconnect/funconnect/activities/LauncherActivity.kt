@@ -15,6 +15,9 @@ class LauncherActivity : AppCompatActivity() {
     private var mDelayHandler: Handler? = null
     private var nextIntent : Intent? = null
 
+    /**
+     * Handles the first activity selection
+     */
     private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
             FirebaseMessaging.getInstance().isAutoInitEnabled = true
