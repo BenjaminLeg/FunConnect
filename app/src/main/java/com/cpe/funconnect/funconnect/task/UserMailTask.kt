@@ -3,6 +3,7 @@ package com.cpe.funconnect.funconnect.task
 import android.os.AsyncTask
 import android.util.Log
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
+import com.cpe.funconnect.funconnect.data.emailExists
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_EMAIL
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
@@ -18,9 +19,10 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
         try {
             val (_, response, result)= (URL_EMAIL + mEmail)
                 .httpGet()
-                .response()
+                .responseObject(emailExists.Deserializer())
 
 
+            Log.d(TAG, result.component1().toString())
             reply = handleAnswer(response, result)
         }catch (e : Exception){
             Log.d(TAG, "Error occurred : "+ e.toString())

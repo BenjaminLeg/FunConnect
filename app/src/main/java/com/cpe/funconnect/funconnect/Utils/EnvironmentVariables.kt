@@ -3,7 +3,7 @@ package com.cpe.funconnect.funconnect.utils
 class EnvironmentVariables {
     companion object {
         // Construct URL
-        const val BASE_URL = "http://10.0.2.2:"
+        const val BASE_URL = "http://192.168.137.1:"
         const val PORT_SERVER_AUTH = "3030"
         const val PORT_SERVER_PY = "5000"
         const val REGISTER = "/register"

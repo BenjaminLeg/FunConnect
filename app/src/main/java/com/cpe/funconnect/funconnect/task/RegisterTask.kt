@@ -5,6 +5,7 @@ package com.cpe.funconnect.funconnect.task
 import android.os.AsyncTask
 import android.util.Log
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
+import com.cpe.funconnect.funconnect.data.registrationValid
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_SERVER
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -31,10 +32,10 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
                 .httpPost()
                 .header("Content-Type" to "application/json")
                 .body(this.jsonObject.toString())
-                .response()
+                .responseObject(registrationValid.Deserializer())
 
             Log.d(TAG, "Request : ${request.toString()}")
-            Log.d(TAG, "Result: ${response.toString()}")
+            Log.d(TAG, "Result: ${result.component1().toString()}")
 
             when (result) {
                 is Result.Failure -> {
