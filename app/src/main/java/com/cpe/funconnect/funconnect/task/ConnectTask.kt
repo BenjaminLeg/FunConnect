@@ -110,7 +110,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
     }
 
     companion object {
-        private const val TAG = "RegisterTask"
+        private const val TAG = "ConnectTask"
         var answer : String? = null
     }
 

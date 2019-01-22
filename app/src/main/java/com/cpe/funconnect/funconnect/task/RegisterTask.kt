@@ -30,7 +30,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
             val (_, response, result) = URL_SERVER
                 .httpPost()
                 .header("Content-Type" to "application/json")
-                .body(this.jsonObject.toString())
+                .jsonBody(this.jsonObject.toString())
                 .responseObject(registrationValid.Deserializer())
 
             Log.d(TAG, "Result: ${result.component1()!!.isRegistrationValid}")
