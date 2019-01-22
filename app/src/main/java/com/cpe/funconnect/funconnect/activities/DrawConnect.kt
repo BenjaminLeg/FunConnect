@@ -10,12 +10,12 @@ import android.view.View.VISIBLE
 import com.cpe.funconnect.funconnect.*
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import com.cpe.funconnect.funconnect.task.ConnectTask
-import com.cpe.funconnect.funconnect.task.RegisterTask.Companion.answer
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.SPLASH_DELAY
 import kotlinx.android.synthetic.main.activity_draw.*
 import kotlinx.android.synthetic.main.validation_layout.*
 import org.json.JSONObject
 import android.os.Build
+import com.cpe.funconnect.funconnect.task.ConnectTask.Companion.answer
 import com.cpe.funconnect.funconnect.utils.Utils.Companion.handleError
 
 
@@ -57,7 +57,9 @@ class DrawConnect: DrawActivity() {
     override fun sendTasks(){
         showProgress(true)
         userControl?.addSignature(paintView!!.getCoord())
-        connectTask = ConnectTask(JSONObject(gson!!.toJson(userControl!!.getSignature(0))), this)
+        var jsonTmp = JSONObject(gson!!.toJson(userControl!!.getSignature(userControl!!.getAttempt() -1)))
+        jsonTmp.put("uid", userControl!!.getEmail())
+        connectTask = ConnectTask(jsonTmp, this)
         connectTask?.execute()
     }
 

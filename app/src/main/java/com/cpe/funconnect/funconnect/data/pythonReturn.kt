@@ -4,8 +4,8 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 
 data class pythonReturn(
-    var status : String,
-    var isAuthOK : Boolean
+    var state : String,
+    var isAuthValid : Boolean
 ) {
     class Deserializer : ResponseDeserializable<pythonReturn> {
         override fun deserialize(content: String): pythonReturn

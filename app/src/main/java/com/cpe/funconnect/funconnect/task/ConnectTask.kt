@@ -12,6 +12,7 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
 import java.lang.Thread.sleep
+import java.nio.charset.Charset
 
 class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
@@ -29,13 +30,12 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
         try{
             //Ask for token while sending signature
-            val (_, response, result) = URL_PYTHON
+            val (request, response, result) = URL_PYTHON
                 .httpPost()
                 .header("Content-Type" to "application/json")
-                .body(this.jsonObject.toString())
+                .jsonBody(this.jsonObject.toString())
                 .responseObject(idReturn.Deserializer())
 
-            Log.d(TAG, "Result: ${result.toString()}")
 
             when(result){
                 is Result.Failure ->{
@@ -44,7 +44,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                 }
                 is Result.Success ->{
                     try{
-                        val token = result.component1()!!.task_id
+                        val token = result.component1()!!.taskid
                         reply = verificationReturn(token)
                     }catch (ex : Exception){
                         Log.d(TAG, "Error while opening token : " + ex.toString())
@@ -63,26 +63,31 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
         //Spamming Python server to get the reply
         var message = ""
         var reply = false
-        while (message != "verified" && answer != "No internet connection"){
-            val (_, responseJWT, resultJWT) = (URL_VERIFY + token)
+        while (message != "SUCCESS" && answer != "No internet connection"){
+            val (requestJWT, responseJWT, resultJWT) = (URL_VERIFY + token)
                 .httpGet()
-                .header("Content-Type" to "application/json")
                 .responseObject(pythonReturn.Deserializer())
 
+            Log.d(TAG, "Request: ${requestJWT.toString()}")
+            Log.d(TAG, "Result: ${responseJWT.toString()}")
             when(resultJWT) {
                 is Result.Failure -> {
                     answer = "No internet connection"
                     reply = false
                 }
                 is Result.Success -> {
-                    message = resultJWT.component1()!!.status
-                    if(message == "PENDING"){
-                        sleep(500)
-                    }
-                    else{
-                        reply = checkResponse(resultJWT.component1()!!.isAuthOK)
-                    }
+                    message = resultJWT.component1()!!.state
+                    Log.d(TAG, "Message: $message")
                 }
+            }
+            if(message == "PROGRESS"){
+                Log.d(TAG, "Sleeping 1 demi seconde")
+                sleep(500)
+            }
+            else{
+                reply = checkResponse(resultJWT.component1()!!.isAuthValid)
+                Log.d(TAG, "Going to break, answer : ${reply.toString()}")
+                break
             }
         }
         return reply
