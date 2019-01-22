@@ -12,7 +12,6 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
 import java.lang.Thread.sleep
-import java.nio.charset.Charset
 
 class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
@@ -37,6 +36,8 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                 .responseObject(idReturn.Deserializer())
 
 
+            Log.d(TAG, "Request: ${request.toString()}")
+            Log.d(TAG, "Result: ${response.toString()}")
             when(result){
                 is Result.Failure ->{
                     answer = response.statusCode.toString()
