@@ -1,11 +1,10 @@
 package com.cpe.funconnect.funconnect.task
 
 
-
 import android.os.AsyncTask
 import android.util.Log
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
-import com.cpe.funconnect.funconnect.data.registrationValid
+import com.cpe.funconnect.funconnect.data.RegistrationValid
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_SERVER
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -13,10 +12,10 @@ import org.json.JSONObject
 import java.lang.Exception
 
 
-class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
+class RegisterTask() : AsyncTask<Void, Void, Boolean>() {
 
-    private lateinit var jsonObject : JSONObject
-    private lateinit var connection : ConnectionInterface
+    private lateinit var jsonObject: JSONObject
+    private lateinit var connection: ConnectionInterface
 
 
     constructor(jsonObject: JSONObject, connectionInterface: ConnectionInterface) : this() {
@@ -31,7 +30,7 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
                 .httpPost()
                 .header("Content-Type" to "application/json")
                 .jsonBody(this.jsonObject.toString())
-                .responseObject(registrationValid.Deserializer())
+                .responseObject(RegistrationValid.Deserializer())
 
             Log.d(TAG, "Result: ${result.component1()!!.isRegistrationValid}")
 
@@ -44,10 +43,10 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
                     reply = result.component1()!!.isRegistrationValid
                 }
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             Log.d(TAG, "Error: ${e.message}")
             answer = "An error occurred during connection to server"
-        }finally{
+        } finally {
             return reply
         }
     }
@@ -59,6 +58,6 @@ class RegisterTask() : AsyncTask<Void,Void,Boolean>() {
 
     companion object {
         private const val TAG = "RegisterTask"
-        var answer : String? = null
+        var answer: String? = null
     }
 }

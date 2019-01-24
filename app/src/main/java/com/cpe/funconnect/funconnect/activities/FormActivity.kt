@@ -13,6 +13,7 @@ import com.cpe.funconnect.funconnect.R
 import com.cpe.funconnect.funconnect.utils.Utils.Companion.handleError
 import com.cpe.funconnect.funconnect.task.UserMailTask
 import com.cpe.funconnect.funconnect.task.UserMailTask.Companion.answer
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import kotlinx.android.synthetic.main.activity_form.*
 
 /**
@@ -107,7 +108,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * */
     private fun onSuccessReply(){
         val intentRegister = Intent(this, DrawRegister::class.java)
-        intentRegister.putExtra("email", email.text.toString())
+        intentRegister.putExtra(EnvironmentVariables.EMAIL, email.text.toString())
         startActivity(intentRegister)
     }
 
@@ -116,7 +117,7 @@ class FormActivity : AppCompatActivity(), ConnectionInterface {
      * If wrong Email -> focus on the input line
      * */
     private fun onFailureReply(){
-        if (answer != "Email already exists"){
+        if (answer != EnvironmentVariables.EMAIL_EXISTS){
             handleError(this, answer)
         }
         else{

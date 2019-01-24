@@ -38,13 +38,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         remoteMessage?.data?.isNotEmpty()?.let {
-            if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
-                try{
+            if (this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty") {
+                try {
                     Log.d(TAG, "Message data payload: " + remoteMessage.data)
-
-                    val body : String = "body"
+                    val body: String = "body"
                     sendNotification(remoteMessage.data.get(body)!!)
-                }catch (e : Exception){
+                } catch (e: Exception) {
                     Log.d(TAG, "Error receiving notification : " + e.toString())
                 }
             }
@@ -58,7 +57,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message Notification Body: ${it.body}")
             sendNotification(message)
         }*/
-
 
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -75,8 +73,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String?) {
 
         super.onNewToken(token)
+        // Only for debugging purpose
         Log.d(TAG, "Refreshed token: $token")
 
+        // Saves the token locally
         getSharedPreferences("_", MODE_PRIVATE).edit().putString("fb", token).apply();
     }
     // [END on_new_token]
@@ -89,14 +89,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageBody: String) {
         val intent = Intent(this, DrawConnect::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
 
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher)
-            .setContentTitle("FunConnect Notification")
+            .setContentTitle("DrawConnect")
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
@@ -106,9 +108,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 

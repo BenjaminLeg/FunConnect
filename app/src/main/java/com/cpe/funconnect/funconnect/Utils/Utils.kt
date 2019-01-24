@@ -9,13 +9,13 @@ class Utils {
         fun handleError(context: Context, answer: String?) {
             when (answer) {
                 "404" -> {
-                    Toast.makeText(context, "Internet issue", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, EnvironmentVariables.PAGE_NOT_FOUND, Toast.LENGTH_LONG).show()
                 }
                 "400" -> {
-                    Toast.makeText(context, "Bad request", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, EnvironmentVariables.BAD_REQUEST, Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    Toast.makeText(context, "Internal issue", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, EnvironmentVariables.INT_ISSUE, Toast.LENGTH_LONG).show()
                 }
             }
         }

@@ -3,13 +3,15 @@ package com.cpe.funconnect.funconnect.task
 import android.os.AsyncTask
 import android.util.Log
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
-import com.cpe.funconnect.funconnect.data.emailExists
+import com.cpe.funconnect.funconnect.data.EmailExists
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.EMAIL_EXISTS
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_EMAIL
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 
-class UserMailTask constructor(private val mEmail: String, private val connectionInterface: ConnectionInterface) : AsyncTask<Void, Void, Boolean>() {
+class UserMailTask constructor(private val mEmail: String, private val connectionInterface: ConnectionInterface) :
+    AsyncTask<Void, Void, Boolean>() {
 
     /**
      * GET request to the server for checking Email validity
@@ -17,16 +19,13 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
     override fun doInBackground(vararg params: Void): Boolean? {
         var reply = false
         try {
-            val (request, response, result)= (URL_EMAIL + mEmail)
+            val (request, response, result) = (URL_EMAIL + mEmail)
                 .httpGet()
-                .responseObject(emailExists.Deserializer())
-            Log.d(TAG, request.toString())
-            Log.d(TAG, response.toString())
-            Log.d(TAG, result.component1()?.exists.toString())
+                .responseObject(EmailExists.Deserializer())
             reply = handleAnswer(response, result)
-        }catch (e : Exception){
-            Log.d(TAG, "Error occurred : "+ e.toString())
-        }finally {
+        } catch (e: Exception) {
+            Log.d(TAG, "Error occurred : " + e.toString())
+        } finally {
             return reply
         }
     }
@@ -35,9 +34,9 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
      * Checks status code
      * If 200 -> Checks to body of the reply
      */
-    private fun handleAnswer(response : Response, result: Result<emailExists, Exception>) : Boolean {
+    private fun handleAnswer(response: Response, result: Result<EmailExists, Exception>): Boolean {
 
-        var retour = result.component1()!!.exists
+        var exist = result.component1()!!.exists
         var reply = false
 
         when (result) {
@@ -47,9 +46,9 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
             }
             is Result.Success -> {
                 //Replace if condition with the correct expected output
-                if (retour) {
+                if (exist) {
                     reply = false
-                    answer = "Email already exists"
+                    answer = EMAIL_EXISTS
                 } else {
                     reply = true
                 }
@@ -69,7 +68,7 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
 
     companion object {
         private const val TAG = "UserMailTask"
-        var answer : String? = null
+        var answer: String? = null
     }
 
 }

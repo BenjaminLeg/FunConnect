@@ -8,11 +8,13 @@ import android.util.DisplayMetrics
 import android.util.AttributeSet
 import android.view.View
 
-
+/**
+ * Class taken from gitHub, it has only been adapted to fit with the data used
+ */
 class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var mX: Float = 0.toFloat()
     private var mY: Float = 0.toFloat()
-    private lateinit var signature : Signature
+    private lateinit var signature: Signature
     private var mPath: Path? = null
     private val mPaint: Paint
     private val paths = ArrayList<FingerPath>()
@@ -21,8 +23,8 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var strokeWidth: Float = 0.toFloat()
     private var mBitmap: Bitmap? = null
     private var mCanvas: Canvas? = null
-    private var time : Long = 0
-    private var firstTouch : Boolean = true
+    private var time: Long = 0
+    private var firstTouch: Boolean = true
     private val mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
     init {
@@ -38,6 +40,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     }
 
+    /**
+     * Init the complete view but also all the variables
+     */
     fun init(metrics: DisplayMetrics) {
         val height = metrics.heightPixels
         val width = metrics.widthPixels
@@ -51,10 +56,16 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         strokeWidth = BRUSH_SIZE
     }
 
+    /**
+     * Used to get the signature object which is applied to the user
+     */
     fun getCoord(): Signature {
         return this.signature
     }
 
+    /**
+     * Clears the view, can be applied from the UI in case of wrong entry
+     */
     fun clear() {
         backGroundColor = DEFAULT_BG_COLOR
         paths.clear()
@@ -84,7 +95,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private fun touchStart(x: Float, y: Float) {
         mPath = Path()
         val tmp = mPath
-        if(tmp is Path){
+        if (tmp is Path) {
             val fp = FingerPath(currentColor, strokeWidth, tmp)
             paths.add(fp)
         }
@@ -96,11 +107,11 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mX = x
         mY = y
 
-        if(firstTouch){
+        if (firstTouch) {
             time = SystemClock.uptimeMillis()
             firstTouch = false
         }
-        signature.addCoord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt() )
+        signature.addCoord(x.toInt(), y.toInt(), (SystemClock.uptimeMillis() - time).toInt())
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -111,7 +122,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             mPath!!.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
             mX = x
             mY = y
-            signature.addCoord(x.toInt() , y.toInt(), (SystemClock.uptimeMillis() - time).toInt())
+            signature.addCoord(x.toInt(), y.toInt(), (SystemClock.uptimeMillis() - time).toInt())
         }
     }
 
@@ -141,7 +152,9 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return true
     }
 
-
+    /**
+     * Properties used for the drawing
+     */
     companion object {
 
         var BRUSH_SIZE = 10.toFloat()

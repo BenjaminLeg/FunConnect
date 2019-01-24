@@ -4,7 +4,7 @@ import com.cpe.funconnect.funconnect.model.Signature
 import com.cpe.funconnect.funconnect.model.Traces
 import com.cpe.funconnect.funconnect.model.Users
 
-interface userRequestControlers {
+interface UserRequestControlers {
     fun addSignature(signature : Signature)
     fun getAttempt(): Int
     fun addAttempt()

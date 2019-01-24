@@ -9,11 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.cpe.funconnect.funconnect.*
-import com.cpe.funconnect.funconnect.controlers.userRequestControler
-import com.cpe.funconnect.funconnect.controlers.userRequestControlers
+import com.cpe.funconnect.funconnect.controlers.UserRequestControler
+import com.cpe.funconnect.funconnect.controlers.UserRequestControlers
 import com.cpe.funconnect.funconnect.model.PaintView
-import com.cpe.funconnect.funconnect.model.User
 import com.cpe.funconnect.funconnect.services.MyFirebaseMessagingService
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_draw.*
@@ -24,8 +24,8 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
 
     protected var paintView: PaintView? = null
     protected var progressBar: ProgressBar? = null
-    protected var userControl : userRequestControlers? = null
-    protected var gson : Gson? = null
+    protected var userControl: UserRequestControlers? = null
+    protected var gson: Gson? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
      * Handles reply from asyncTask connexion
      * To be further implemented inside the derived classes
      */
-    override fun onPostReply(success : Boolean) {
+    override fun onPostReply(success: Boolean) {
         paintView?.clear()
         progressBar?.visibility = View.GONE
         paintView?.visibility = View.VISIBLE
@@ -73,7 +73,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     /**
      * Initiate the complete view on the screen
      */
-    private fun initValues(){
+    private fun initValues() {
         initView()
         initGson()
         initUser()
@@ -86,7 +86,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     /**
      * Prepares the view elements
      */
-    private fun initView(){
+    private fun initView() {
         paintView = findViewById(R.id.paintView)
         progressBar = findViewById(R.id.progressBar)
         val metrics = DisplayMetrics()
@@ -97,14 +97,17 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     /**
      * Prepares the user depending on the entry point in the app
      */
-    private fun initUser(){
-        if(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty") != "empty"){
-            userControl = userRequestControler(this.getSharedPreferences("_", Context.MODE_PRIVATE).getString("mail", "empty"),
-                MyFirebaseMessagingService.getToken(this))
-        }
-        else {
-            userControl = userRequestControler(
-                intent.getStringExtra("email"),
+    private fun initUser() {
+        if (this.getSharedPreferences("_", Context.MODE_PRIVATE).getString(
+                EnvironmentVariables.MAIL,
+                "empty") != "empty") {
+            userControl = UserRequestControler(
+                this.getSharedPreferences("_", Context.MODE_PRIVATE).getString(EnvironmentVariables.MAIL, "empty"),
+                MyFirebaseMessagingService.getToken(this)
+            )
+        } else {
+            userControl = UserRequestControler(
+                intent.getStringExtra(EnvironmentVariables.EMAIL),
                 MyFirebaseMessagingService.getToken(this)
             )
         }
@@ -113,7 +116,7 @@ abstract class DrawActivity : AppCompatActivity(), ConnectionInterface {
     /**
      * Prepares the Gson module
      */
-    private fun initGson(){
+    private fun initGson() {
         gson = Gson()
         val gsonBuilder = GsonBuilder()
         gson = gsonBuilder.create()

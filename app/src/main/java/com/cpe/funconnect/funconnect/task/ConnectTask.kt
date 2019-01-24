@@ -5,19 +5,20 @@ import android.util.Log
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_PYTHON
 import com.cpe.funconnect.funconnect.utils.EnvironmentVariables.Companion.URL_VERIFY
 import com.cpe.funconnect.funconnect.activities.ConnectionInterface
-import com.cpe.funconnect.funconnect.data.idReturn
-import com.cpe.funconnect.funconnect.data.pythonReturn
+import com.cpe.funconnect.funconnect.data.IdReturn
+import com.cpe.funconnect.funconnect.data.PythonReturn
+import com.cpe.funconnect.funconnect.utils.EnvironmentVariables
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import org.json.JSONObject
 import java.lang.Thread.sleep
 
-class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
+class ConnectTask() : AsyncTask<Void, Void, Boolean>() {
 
 
-    private lateinit var jsonObject : JSONObject
-    private lateinit var connection : ConnectionInterface
+    private lateinit var jsonObject: JSONObject
+    private lateinit var connection: ConnectionInterface
 
     constructor(jsonObject: JSONObject, connectionInterface: ConnectionInterface) : this() {
         this.jsonObject = jsonObject
@@ -27,53 +28,44 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
     override fun doInBackground(vararg params: Void?): Boolean {
         var reply = false
 
-        try{
+        try {
             //Ask for token while sending signature
             val (request, response, result) = URL_PYTHON
                 .httpPost()
                 .header("Content-Type" to "application/json")
                 .jsonBody(this.jsonObject.toString())
-                .responseObject(idReturn.Deserializer())
+                .responseObject(IdReturn.Deserializer())
 
-
-            Log.d(TAG, "Request: ${request.toString()}")
-            Log.d(TAG, "Result: ${response.toString()}")
-            when(result){
-                is Result.Failure ->{
+            when (result) {
+                is Result.Failure -> {
                     answer = response.statusCode.toString()
                     reply = false
                 }
-                is Result.Success ->{
-                    try{
-                        val token = result.component1()!!.taskid
-                        reply = verificationReturn(token)
-                    }catch (ex : Exception){
-                        Log.d(TAG, "Error while opening token : " + ex.toString())
-                    }
+                is Result.Success -> {
+                    val token = result.component1()!!.taskid
+                    reply = verificationReturn(token)
                 }
             }
-        }catch (e : java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             Log.d(TAG, "Error occurred : " + e.toString())
-        }finally {
+        } finally {
             return reply
         }
 
     }
 
     private fun verificationReturn(token: String): Boolean {
-        //Spamming Python server to get the reply
+        // Spamming Python server to get the reply
         var message = ""
         var reply = false
-        while (message != "SUCCESS" && answer != "No internet connection"){
+        while (message != "SUCCESS" && answer != EnvironmentVariables.NO_INT) {
             val (requestJWT, responseJWT, resultJWT) = (URL_VERIFY + token)
                 .httpGet()
-                .responseObject(pythonReturn.Deserializer())
+                .responseObject(PythonReturn.Deserializer())
 
-            Log.d(TAG, "Request: ${requestJWT.toString()}")
-            Log.d(TAG, "Result: ${responseJWT.toString()}")
-            when(resultJWT) {
+            when (resultJWT) {
                 is Result.Failure -> {
-                    answer = "No internet connection"
+                    answer = EnvironmentVariables.NO_INT
                     reply = false
                 }
                 is Result.Success -> {
@@ -81,11 +73,10 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
                     Log.d(TAG, "Message: $message")
                 }
             }
-            if(message == "PROGRESS"){
-                Log.d(TAG, "Sleeping 1 demi seconde")
+            if (message == "PROGRESS") {
+                Log.d(TAG, "Sleeping for half a second")
                 sleep(500)
-            }
-            else{
+            } else {
                 reply = checkResponse(resultJWT.component1()!!.isAuthValid)
                 Log.d(TAG, "Going to break, answer : ${reply.toString()}")
                 break
@@ -94,13 +85,12 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
         return reply
     }
 
-    private fun checkResponse(messageOK: Boolean) : Boolean {
+    private fun checkResponse(messageOK: Boolean): Boolean {
         var reply = false
-        if(messageOK){
+        if (messageOK) {
             reply = true
-        }
-        else{
-            answer = "invalid entry"
+        } else {
+            answer = EnvironmentVariables.WRONG_ENTRY
         }
         return reply
     }
@@ -112,7 +102,7 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>(){
 
     companion object {
         private const val TAG = "ConnectTask"
-        var answer : String? = null
+        var answer: String? = null
     }
 
 }

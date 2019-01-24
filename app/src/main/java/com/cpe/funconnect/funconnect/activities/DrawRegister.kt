@@ -20,18 +20,18 @@ class DrawRegister : DrawActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_draw)
         super.onCreate(savedInstanceState)
-        attemptText.text = getString(R.string.Register, userControl?.getAttempt(), EnvironmentVariables.ATTEMPT_REGISTER)
+        attemptText.text =
+                getString(R.string.Register, userControl?.getAttempt(), EnvironmentVariables.ATTEMPT_REGISTER)
     }
 
     /**
      * Handles the answer from the register request
      */
-    override fun onPostReply(success : Boolean) {
+    override fun onPostReply(success: Boolean) {
         super.onPostReply(success)
-        if (success){
+        if (success) {
             onSuccess()
-        }
-        else{
+        } else {
             Utils.handleError(this, answer)
         }
     }
@@ -39,9 +39,10 @@ class DrawRegister : DrawActivity() {
     /**
      * Behavior on a successful answer
      */
-    private fun onSuccess(){
-        getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit().putString("mail", userControl?.getEmail()).apply()
-        Toast.makeText(this, "Registered", Toast.LENGTH_LONG).show()
+    private fun onSuccess() {
+        getSharedPreferences("_", FirebaseMessagingService.MODE_PRIVATE).edit()
+            .putString(EnvironmentVariables.MAIL, userControl?.getEmail()).apply()
+        Toast.makeText(this, getString(R.string.Registered), Toast.LENGTH_LONG).show()
         val intentIdle = Intent(this, IdleActivity::class.java)
         intentIdle.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intentIdle.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -52,14 +53,14 @@ class DrawRegister : DrawActivity() {
     /**
      * Checks the number of attempts and prepare the request before sending it
      */
-    override fun sendTasks(){
+    override fun sendTasks() {
         userControl?.addSignature(paintView!!.getCoord())
         paintView?.clear()
-        if(userControl!!.getAttempt() != EnvironmentVariables.ATTEMPT_REGISTER){
+        if (userControl!!.getAttempt() != EnvironmentVariables.ATTEMPT_REGISTER) {
             userControl!!.addAttempt()
-            attemptText.text = getString(R.string.Register, userControl?.getAttempt(), EnvironmentVariables.ATTEMPT_REGISTER)
-        }
-        else{
+            attemptText.text =
+                    getString(R.string.Register, userControl?.getAttempt(), EnvironmentVariables.ATTEMPT_REGISTER)
+        } else {
             buildRequest()
         }
     }
@@ -67,7 +68,7 @@ class DrawRegister : DrawActivity() {
     /**
      * Builds up the JSON format for sending it to the server
      */
-    private fun buildRequest(){
+    private fun buildRequest() {
         showProgress()
         registerTask = RegisterTask(JSONObject(gson!!.toJson(userControl!!.getUser())), this)
         registerTask?.execute()
@@ -76,7 +77,7 @@ class DrawRegister : DrawActivity() {
     /**
      * Hides paintView and shows the progressBar
      */
-    private fun showProgress(){
+    private fun showProgress() {
         paintView?.visibility = View.INVISIBLE
         progressBar?.visibility = View.VISIBLE
     }

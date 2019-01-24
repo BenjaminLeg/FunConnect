@@ -9,7 +9,6 @@
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <!-- [START fcm_default_icon] -->
@@ -56,10 +55,6 @@
         <activity
                 android:name=".activities.DrawConnect"
                 android:label="Please sign">
-        </activity>
-        <activity
-                android:name=".activities.ValidationScreenActivity"
-                android:theme="@style/AppThemeNoActionBar">
         </activity>
 
         <service
