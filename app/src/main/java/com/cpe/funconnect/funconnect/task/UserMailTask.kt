@@ -22,6 +22,9 @@ class UserMailTask constructor(private val mEmail: String, private val connectio
             val (request, response, result) = (URL_EMAIL + mEmail)
                 .httpGet()
                 .responseObject(EmailExists.Deserializer())
+
+            Log.d(TAG, "Request :" +  request.toString())
+            Log.d(TAG, "Response : " + response.toString())
             reply = handleAnswer(response, result)
         } catch (e: Exception) {
             Log.d(TAG, "Error occurred : " + e.toString())

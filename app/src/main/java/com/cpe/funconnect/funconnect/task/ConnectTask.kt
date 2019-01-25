@@ -35,6 +35,8 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>() {
                 .header("Content-Type" to "application/json")
                 .jsonBody(this.jsonObject.toString())
                 .responseObject(IdReturn.Deserializer())
+            Log.d(TAG, "Request :" +  request.toString())
+            Log.d(TAG, "Response : " + response.toString())
 
             when (result) {
                 is Result.Failure -> {
@@ -62,6 +64,9 @@ class ConnectTask() : AsyncTask<Void, Void, Boolean>() {
             val (requestJWT, responseJWT, resultJWT) = (URL_VERIFY + token)
                 .httpGet()
                 .responseObject(PythonReturn.Deserializer())
+
+            Log.d(TAG, "Request GET :" +  requestJWT.toString())
+            Log.d(TAG, "Response GET : " + responseJWT.toString())
 
             when (resultJWT) {
                 is Result.Failure -> {
